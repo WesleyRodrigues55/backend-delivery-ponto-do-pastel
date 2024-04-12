@@ -11,6 +11,6 @@ try {
     console.error(e);
 }
 
-let db = conn.db("ponto_do_pastel");
+let db = conn.db(process.env.DATABASE);
 
 export default db;

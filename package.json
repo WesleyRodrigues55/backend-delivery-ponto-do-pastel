@@ -4,6 +4,11 @@
     "version": "1.0.0",
     "description": "",
     "main": "index.js",
+    "repository": "https://github.com/WesleyRodrigues55/backend-delivery-ponto-do-pastel",
+    "private": "false",
+    "engines": {
+        "node": ">=14"
+    },
     "scripts": {
         "start": "nodemon src/index.js",
         "start:prod": "node src/index.js",
