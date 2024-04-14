@@ -1,14 +1,15 @@
 import express from "express";
-import db from "../config/db.js";
+import mongoose from 'mongoose'
+import conn from "../config/db.js";
 import { ObjectId } from "mongodb";
+import User from "../model/User.js";
 
 const router = express.Router();
-const collection = await db.collection("usuario");
 
 // get list users
 router.get("/users", async(req, res) => {
     try {
-        const results = await collection.find({}).toArray();
+        const results = await User.find({});
         res.status(200).send(results);
     } catch (error) {
         console.error("Erro ao buscar usuários:", error);
@@ -18,11 +19,16 @@ router.get("/users", async(req, res) => {
 
 // get users with aggregations
 router.get("/users-aggreg", async(req, res) => {
-    let results = await collection.aggregate([
-        { "$project": { "nome": 1, "email": 1, "whatsapp": 1 } },
-        { "$sort": { "nome": -1 } },
-    ]).toArray();
-    res.send(results).status(200);
+    try {
+        const results = await User.aggregate([
+            { "$project": { "nome": 1, "email": 1, "whatsapp": 1 } },
+            { "$sort": { "nome": -1 } },
+        ]);
+        res.send(results).status(200);
+    } catch (error) {
+        console.error("Erro ao buscar usuários:", error);
+        res.status(500).send("Erro ao buscar usuários");
+    }
 });
 
 // get user by id
@@ -30,12 +36,12 @@ router.get("/users/:id", async(req, res) => {
     const id = req.params.id;
     try {
         const query = { _id: new ObjectId(id) };
-        const user = await collection.findOne(query);
+        const results = await User.findOne(query);
 
-        if (!user) {
+        if (!results) {
             res.status(404).send("Usuário não encontrado");
         } else {
-            res.status(200).send(user);
+            res.send(results).status(200);
         }
     } catch (error) {
         console.error("Erro ao buscar usuário por ID:", error);
@@ -47,7 +53,8 @@ router.get("/users/:id", async(req, res) => {
 router.post("/users", async(req, res) => {
     try {
         let query = req.body;
-        let results = await collection.insertOne(query);
+        let newUser = new User(query);
+        let results = await newUser.save();
         res.send(results).status(204);
     } catch (error) {
         console.error("Erro ao inserir um novo usuário:", error);
@@ -55,13 +62,12 @@ router.post("/users", async(req, res) => {
     }
 })
 
-
 // updating user
 router.put("/users/:id", async(req, res) => {
     try {
         let id = req.params.id;
         let query = req.body;
-        let results = await collection.updateOne({ _id: new ObjectId(id) }, { $set: query });
+        let results = await User.updateOne({ _id: new ObjectId(id) }, { $set: query });
         res.send(results).status(204);
     } catch (error) {
         console.error("Erro ao atualizar um usuário pelo ID:", error);
@@ -69,21 +75,16 @@ router.put("/users/:id", async(req, res) => {
     }
 })
 
-
+// delete user
 router.delete("/users/:id", async(req, res) => {
     try {
         let id = req.params.id;
-        let results = await collection.deleteOne({ _id: new ObjectId(id) });
+        let results = await User.deleteOne({ _id: new ObjectId(id) });
         res.send(results).status(204);
     } catch (error) {
         console.error("Erro ao apagar um usuário pelo ID:", error);
         res.status(500).send("Erro ao apagar um usuário pelo ID");
     }
 })
-
-
-
-
-
 
 export default router;
