@@ -1,9 +1,11 @@
 import mongoose from 'mongoose';
 
+import User from './User.js'
+
 const cartSchema = new mongoose.Schema({
     usuario_id: {
-        type: Schema.Types.ObjectId,
-        ref: 'User'
+        type: mongoose.Schema.Types.ObjectId,
+        ref: User
     },
     status_compra: {
         type: String,

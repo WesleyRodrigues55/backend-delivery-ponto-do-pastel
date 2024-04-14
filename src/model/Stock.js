@@ -1,13 +1,16 @@
 import mongoose from "mongoose";
 
+import Product from "./Product.js"
+import Ingredient from "./Ingredient.js"
+
 const stockSchema = new mongoose.Schema({
-    carrinho_id: {
-        type: Schema.Types.ObjectId,
-        ref: 'Cart'
+    produto_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: Product
     },
     ingrediente_id: {
-        type: Schema.Types.ObjectId,
-        ref: 'Ingredient'
+        type: mongoose.Schema.Types.ObjectId,
+        ref: Ingredient
     },
     descricao: {
         type: String,

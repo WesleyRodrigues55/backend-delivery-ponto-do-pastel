@@ -1,9 +1,13 @@
 import mongoose from 'mongoose';
 
+import Ingredient from './Ingredient.js';
+import Cart from './Cart.js';
+import User from './User.js';
+
 const ingredientSchema = new mongoose.Schema({
     ingredient_id: {
-        type: Schema.Types.ObjectId,
-        ref: 'Ingredient'
+        type: mongoose.Schema.Types.ObjectId,
+        ref: Ingredient
     },
     nome: {
         type: String,
@@ -13,12 +17,12 @@ const ingredientSchema = new mongoose.Schema({
 
 const itemsCartSchema = new mongoose.Schema({
     carrinho_id: {
-        type: Schema.Types.ObjectId,
-        ref: 'Cart'
+        type: mongoose.Schema.Types.ObjectId,
+        ref: Cart
     },
     produto_id: {
-        type: Schema.Types.ObjectId,
-        ref: 'User'
+        type: mongoose.Schema.Types.ObjectId,
+        ref: User
     },
     lista_ingredientes: {
         type: [ingredientSchema],

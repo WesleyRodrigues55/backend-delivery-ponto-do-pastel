@@ -1,5 +1,8 @@
 import mongoose from 'mongoose';
 
+import Cart from './Cart.js';
+import User from './User.js';
+
 const listaEnderecoSchema = new mongoose.Schema({
     bairro: {
         type: String,
@@ -43,6 +46,14 @@ const listaPagamentoScheme = new mongoose.Schema({
 });
 
 const oderDetailsSchema = new mongoose.Schema({
+    carrinho_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: Cart
+    },
+    usuario_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: User
+    },
     lista_endereco: {
         type: [listaEnderecoSchema],
         required: true,

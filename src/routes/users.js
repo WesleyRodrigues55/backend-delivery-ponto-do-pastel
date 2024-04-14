@@ -1,6 +1,5 @@
 import express from "express";
-import mongoose from 'mongoose'
-import conn from "../config/db.js";
+import "../config/db.js";
 import { ObjectId } from "mongodb";
 import User from "../model/User.js";
 
