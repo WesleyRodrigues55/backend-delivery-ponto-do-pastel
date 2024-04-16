@@ -54,7 +54,6 @@ router.get("/product-price/price", async (req, res) => {
     }
 })
 
-
 router.post("/product", async (req, res) => {
     try {
         let query = req.body;
