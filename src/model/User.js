@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import bcrypt from 'bcrypt';
 
 const userSchema = new mongoose.Schema({
     nome: {
@@ -13,9 +14,8 @@ const userSchema = new mongoose.Schema({
     },
     senha: {
         type: String,
-        unique: true,
         required: true,
-        select: false,
+        // select: false,
     },
     whatsapp: {
         type: String,
@@ -46,6 +46,10 @@ const userSchema = new mongoose.Schema({
 }, {
     versionKey: false
 });
+
+userSchema.method('compare', async(formPass, userPass) => {
+    return bcrypt.compare(formPass, userPass)
+})
 
 const User = mongoose.model('User', userSchema, 'usuario');
 

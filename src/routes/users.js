@@ -2,6 +2,9 @@ import express from "express";
 import "../config/db.js";
 import { ObjectId } from "mongodb";
 import User from "../model/User.js";
+import passport from 'passport';
+
+const unauthorized = passport.authenticate('jwt', { session: false });
 
 const router = express.Router();
 
@@ -31,7 +34,7 @@ router.get("/users-aggreg", async(req, res) => {
 });
 
 // get user by id
-router.get("/users/:id", async(req, res) => {
+router.get("/users/:id", unauthorized, async(req, res) => {
     const id = req.params.id;
     try {
         const query = { _id: new ObjectId(id) };
