@@ -7,12 +7,19 @@ const secretKey = process.env.SECRET_KEY;
 
 passport.use(new LocalStrategy({
         usernameField: 'email',
-        passwordField: 'senha'
+        passwordField: 'senha',
+        wpp: 'whatsapp',
     },
-    async function authenticateUser(email, password, done) {
+    async function authenticateUser(wpp, email, password, done) {
         try {
             // mudar para whatsapp
-            const user = await User.findOne({ email });
+            const user = any;
+            if (!wpp) {
+                user = await User.findOne({ email });
+            } else {
+                user = await User.findOne({ wpp });
+            }
+
             if (!user) {
                 return done(null, false, { message: "User doesn't exist" });
             }

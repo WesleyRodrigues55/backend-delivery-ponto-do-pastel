@@ -15,7 +15,7 @@ const userSchema = new mongoose.Schema({
     senha: {
         type: String,
         required: true,
-        // select: false,
+        select: false,
     },
     whatsapp: {
         type: String,
