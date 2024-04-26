@@ -2,6 +2,9 @@ import express from "express";
 import "../config/db.js";
 import { ObjectId } from "mongodb";
 import Product from "../model/Product.js";
+import passport from 'passport';
+
+const unauthorized = passport.authenticate('jwt', { session: false });
 
 const router = express.Router();
 
@@ -54,7 +57,7 @@ router.get("/product-price/price", async(req, res) => {
     }
 })
 
-router.post("/product", async(req, res) => {
+router.post("/product", unauthorized, async(req, res) => {
     try {
         let query = req.body;
         let newProduct = new Product(query);
@@ -66,7 +69,7 @@ router.post("/product", async(req, res) => {
     }
 })
 
-router.put("/update-product/:id", async(req, res) => {
+router.put("/update-product/:id", unauthorized, async(req, res) => {
     try {
         let id = req.params.id;
         let query = req.body;
@@ -77,18 +80,5 @@ router.put("/update-product/:id", async(req, res) => {
         res.status(500).send("Erro ao atualizar um produto");
     }
 })
-
-
-router.delete("/product/:id", async(req, res) => {
-    try {
-        let id = req.params.id;
-        let results = await Product.deleteOne({ _id: new ObjectId(id) });
-        res.send(results).status(204);
-    } catch (error) {
-        console.error("Erro ao atualizar um  produto:", error);
-        res.status(500).send("Erro ao atualizar um produto");
-    }
-})
-
 
 export default router;

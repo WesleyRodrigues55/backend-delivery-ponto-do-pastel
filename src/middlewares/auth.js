@@ -5,43 +5,41 @@ import User from '../model/User.js';
 import { ObjectId } from 'mongodb';
 const secretKey = process.env.SECRET_KEY;
 
-
-// Estratégia Local: Receberá o POST do Login.
-// No body desta requisição, teremos o campo 'email' e 'password'
 passport.use(new LocalStrategy({
         usernameField: 'email',
         passwordField: 'senha'
     },
-    async function(email, senha, done) {
-
-        // O Middlware verifica se o usuário existe no banco de dados
-        await User.findOne({ email }, (err, user) => {
-            if (err) {
-                return done(err)
-            }
-
-            // Se não existir, retorna false ("Não autorizado!")
+    async function authenticateUser(email, password, done) {
+        try {
+            // mudar para whatsapp
+            const user = await User.findOne({ email });
             if (!user) {
-                return done(null, false, { message: "User doesn't exist" })
+                return done(null, false, { message: "User doesn't exist" });
             }
 
-            // Se existir, verifica se a senha informada está correta
-            user.compare(senha, user.senha)
-                .then(match => {
+            // preciso gerar um cópdigo de validação e inserir esse código no banco vinculado ao perfil do usuário
 
-                    // Se não estiver, retorna false ("Não autorizado!")
-                    if (!match) {
-                        return done(null, false, { message: 'Incorrect Password' })
-                    }
+            // enviar esse código inserido no wpp do usuário
 
-                    // Se sim, retorna as informações do usuário para que o Token seja gerado
-                    return done(null, user)
-                })
-        })
+
+            // em um outro método => receber o código e validar no banco se existe, junto ao número
+            // se true => gerar token de acesso
+            // se false => acesso não autorizado
+
+
+
+
+            const match = await user.compare(password, user.senha);
+            if (!match) {
+                return done(null, false, { message: 'Incorrect Password' });
+            }
+            return done(null, user);
+        } catch (error) {
+            return done(error);
+        }
     }
 ))
 
-// Você deve definir estas funções, caso use Sessões.
 passport.serializeUser((user, done) => {
     done(null, user._id)
 })
@@ -52,31 +50,25 @@ passport.deserializeUser(async(id, done) => {
     })
 })
 
-// Estratégia JWT: Após autenticado, o usuário deverá 
-// enviar o token no Header da requisição.
 const opts = {
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
     secretOrKey: secretKey
 }
 
-// Aqui, o middleware irá extrair o token do Header
-// e verificar se ele é válido. Se o token estiver expirado,
-// ou adulterado, o middleware retorna false ("Não autorizado")
 passport.use(new JwtStrategy(opts, async(payload, done) => {
-    await User.findOne({ _id: payload._id }, (err, user) => {
-        if (err) {
-            return done(err, false)
-        }
-
-        if (!user) {
-            return done(null, false)
-        }
-
-        return done(null, { id: user._id })
-    })
+    User.findOne({ _id: payload._id })
+        .then(user => {
+            if (!user) {
+                return done(null, false);
+            }
+            return done(null, { id: user._id });
+        })
+        .catch(err => {
+            return done(err, false);
+        });
 }))
 
-// Retornamos o middleware
+
 export default (app) => {
     app.use(passport.initialize())
 }
