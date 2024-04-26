@@ -17,38 +17,28 @@ const router = express.Router();
     -> gera código random para verificação no wpp (futuro)
     -> faz um update na chave "codigo_verificacao" no documento do usuário pelo wpp informado
 */
-router.put("/login-app/:whatsapp", async(req, res) => {
+router.put("/generator-code-app/:whatsapp", async(req, res) => {
     try {
         let wpp = req.params.whatsapp;
 
         const validateWhatsapp = await usersUtil.findUserByWhatsapp(wpp);
         if (!validateWhatsapp) {
-            console.error("Erro ao encontrar whastapp:", error);
-            return res.status(500).send("Erro ao encontrar whastapp");
+            console.error("Erro ao encontrar whatsapp:", error);
+            return res.status(500).send("Erro ao encontrar whatsapp");
         }
 
         const codeRandom = usersUtil.generatorCode();
         let results = await User.findOneAndUpdate({ whatsapp: wpp }, { $set: { codigo_verificacao: codeRandom } });
-        res.send(results).status(204);
+        res.send({ message: "Código gerado com sucesso!" }).status(204);
+
+        usersUtil.sendCodeWpp(validateWhatsapp.nome, codeRandom);
     } catch (error) {
         console.error("Erro ao atualizar código de verificação do usuário:", error);
         res.status(500).send("Erro ao atualizar código de verificação do usuário");
     }
 });
 
-/*
-    -> recebe o whatsapp informado anteriormente
-    -> recebe o código recebido no wpp
-    -> valida "whatsapp" e "codigo_verificacao" e gera um toekn de acesso
-    -> como é um segundo passo, validar:
-        -> wpp e código juntos
-*/
-router.post("/authenticator-app", (req, res, next) => {
-
-    // 1° validar código recebido com o que tem no banco pelp wpp informado
-    // se true => autenticar
-    // se false => barrar
-
+router.post("/authenticator-code-app", (req, res, next) => {
     passport.authenticate('local', { session: false },
         (err, user, info) => {
             if (err) {
@@ -60,9 +50,6 @@ router.post("/authenticator-app", (req, res, next) => {
                 return res.status(401).json({ message })
             }
 
-            // Se o usuário estiver cadastrado no banco, ele irá receber um token
-            // com validade de 1 hora! Após este tempo, ele não poderá mais acessar
-            // as rotas protegidas!
             const { _id } = user
             const token = jwt.sign({ _id }, secretKey, { expiresIn: '1h' })
 
@@ -75,6 +62,17 @@ router.post("/authenticator-app", (req, res, next) => {
 
         })(req, res, next)
 })
+
+router.post("/register-with-wpp", async(req, res) => {
+    const query = req.body;
+    try {
+        const newUser = await User.create(query);
+        return res.json({ message: "User created!" });
+    } catch (err) {
+        console.error("User already exists!", err);
+        return res.status(400).json({ error: "User already exists!" });
+    }
+});
 
 /*
     ====> AUTHENTICATE USER LOGIN IN MANAGER SYSTEM
@@ -84,6 +82,7 @@ router.post("/login-system", (req, res, next) => {
     passport.authenticate('local', { session: false },
         (err, user, info) => {
             if (err) {
+                console.error(err)
                 return res.status(500).json({ err })
             }
 
@@ -105,6 +104,7 @@ router.post("/login-system", (req, res, next) => {
         })(req, res, next)
 })
 
+
 router.post("/register", async(req, res) => {
     const { senha, ...rest } = req.body;
     try {
@@ -112,7 +112,7 @@ router.post("/register", async(req, res) => {
         const newUser = await User.create({ senha: hash, ...rest });
         return res.json({ message: "User created!" });
     } catch (err) {
-        console.log(err);
+        console.error("User already exists!", err);
         return res.status(400).json({ error: "User already exists!" });
     }
 });

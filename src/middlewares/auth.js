@@ -6,46 +6,48 @@ import { ObjectId } from 'mongodb';
 const secretKey = process.env.SECRET_KEY;
 
 passport.use(new LocalStrategy({
-        usernameField: 'email',
+        usernameField: 'username',
         passwordField: 'senha',
-        wpp: 'whatsapp',
     },
-    async function authenticateUser(wpp, email, password, done) {
+    async function authenticateUser(username, password, done) {
         try {
-            // mudar para whatsapp
-            const user = any;
-            if (!wpp) {
-                user = await User.findOne({ email });
+            let user;
+            if (/\S+@\S+\.\S+/.test(username)) {
+                user = await User.findOne({
+                    $and: [
+                        { username: username }, { email: username },
+                        { $or: [{ username: { $exists: true } }, { email: { $exists: true } }] }
+                    ]
+                });
             } else {
-                user = await User.findOne({ wpp });
+                user = await User.findOne({
+                    $and: [
+                        { username: username }, { whatsapp: username },
+                        { $or: [{ username: { $exists: true } }, { whatsapp: { $exists: true } }] }
+                    ]
+                });
             }
 
             if (!user) {
                 return done(null, false, { message: "User doesn't exist" });
             }
 
-            // preciso gerar um cópdigo de validação e inserir esse código no banco vinculado ao perfil do usuário
-
-            // enviar esse código inserido no wpp do usuário
-
-
-            // em um outro método => receber o código e validar no banco se existe, junto ao número
-            // se true => gerar token de acesso
-            // se false => acesso não autorizado
-
-
-
-
-            const match = await user.compare(password, user.senha);
-            if (!match) {
-                return done(null, false, { message: 'Incorrect Password' });
+            if (/\S+@\S+\.\S+/.test(username)) {
+                const match = await user.compare(password, user.senha);
+                if (!match) {
+                    return done(null, false, { message: 'Incorrect Password' });
+                }
+            } else {
+                if (user.codigo_verificacao !== password) {
+                    return done(null, false, { message: 'Incorrect Verification Code' });
+                }
             }
+
             return done(null, user);
         } catch (error) {
             return done(error);
         }
-    }
-))
+    }));
 
 passport.serializeUser((user, done) => {
     done(null, user._id)

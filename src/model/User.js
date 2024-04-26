@@ -6,6 +6,12 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    username: {
+        type: String,
+        unique: true,
+        required: true,
+        lowercase: true,
+    },
     email: {
         type: String,
         unique: true,
@@ -14,8 +20,7 @@ const userSchema = new mongoose.Schema({
     },
     senha: {
         type: String,
-        required: true,
-        select: false,
+        // required: true,
     },
     whatsapp: {
         type: String,
