@@ -8,7 +8,7 @@ const unauthorized = passport.authenticate('jwt', { session: false });
 
 const router = express.Router();
 
-router.get("/stock", unauthorized, async(req, res) => {
+router.get("/get-stock", unauthorized, async(req, res) => {
     try {
         const results = await Stock.find({})
             .populate({

@@ -9,7 +9,7 @@ const unauthorized = passport.authenticate('jwt', { session: false });
 const router = express.Router();
 
 // get list users
-router.get("/users", unauthorized, async(req, res) => {
+router.get("/get-users", unauthorized, async(req, res) => {
     try {
         const results = await User.find({});
         res.status(200).send(results);
@@ -34,7 +34,7 @@ router.get("/users-aggreg", unauthorized, async(req, res) => {
 });
 
 // get user by id
-router.get("/users/:id", unauthorized, async(req, res) => {
+router.get("/users-by-id/:id", unauthorized, async(req, res) => {
     const id = req.params.id;
     try {
         const query = { _id: new ObjectId(id) };
@@ -53,7 +53,7 @@ router.get("/users/:id", unauthorized, async(req, res) => {
 
 
 // updating user
-router.put("/users/:id", unauthorized, async(req, res) => {
+router.put("/update-users/:id", unauthorized, async(req, res) => {
     try {
         let id = req.params.id;
         let query = req.body;

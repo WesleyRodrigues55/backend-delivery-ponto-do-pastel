@@ -8,7 +8,7 @@ const unauthorized = passport.authenticate('jwt', { session: false });
 
 const router = express.Router();
 
-router.get("/product", async(req, res) => {
+router.get("/get-products", async(req, res) => {
     try {
         const results = await Product.find({});
         res.status(200).send(results);
@@ -18,7 +18,7 @@ router.get("/product", async(req, res) => {
     }
 })
 
-router.get("/product/:nome", async(req, res) => {
+router.get("/product-by-id/:nome", async(req, res) => {
     try {
         let nome = req.params.nome;
         nome = nome.toLowerCase();
@@ -44,7 +44,7 @@ router.get("/product-ids/idAndPrice", async(req, res) => {
     }
 })
 
-router.get("/product-price/price", async(req, res) => {
+router.get("/product-price", async(req, res) => {
     try {
         const results = await Product.find({}, 'preco ');
         const productPrice = results.map(product => ({
@@ -57,7 +57,7 @@ router.get("/product-price/price", async(req, res) => {
     }
 })
 
-router.post("/product", unauthorized, async(req, res) => {
+router.post("/post-product", unauthorized, async(req, res) => {
     try {
         let query = req.body;
         let newProduct = new Product(query);
