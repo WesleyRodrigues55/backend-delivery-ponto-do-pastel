@@ -2,11 +2,14 @@ import express from "express";
 import "../config/db.js";
 import { ObjectId } from "mongodb";
 import User from "../model/User.js";
+import passport from 'passport';
+
+const unauthorized = passport.authenticate('jwt', { session: false });
 
 const router = express.Router();
 
 // get list users
-router.get("/users", async(req, res) => {
+router.get("/get-users", unauthorized, async(req, res) => {
     try {
         const results = await User.find({});
         res.status(200).send(results);
@@ -17,7 +20,7 @@ router.get("/users", async(req, res) => {
 });
 
 // get users with aggregations
-router.get("/users-aggreg", async(req, res) => {
+router.get("/users-aggreg", unauthorized, async(req, res) => {
     try {
         const results = await User.aggregate([
             { "$project": { "nome": 1, "email": 1, "whatsapp": 1 } },
@@ -31,7 +34,7 @@ router.get("/users-aggreg", async(req, res) => {
 });
 
 // get user by id
-router.get("/users/:id", async(req, res) => {
+router.get("/users-by-id/:id", unauthorized, async(req, res) => {
     const id = req.params.id;
     try {
         const query = { _id: new ObjectId(id) };
@@ -48,21 +51,9 @@ router.get("/users/:id", async(req, res) => {
     }
 });
 
-// insert new user
-router.post("/users", async(req, res) => {
-    try {
-        let query = req.body;
-        let newUser = new User(query);
-        let results = await newUser.save();
-        res.send(results).status(204);
-    } catch (error) {
-        console.error("Erro ao inserir um novo usuário:", error);
-        res.status(500).send("Erro ao inserir um novo usuário");
-    }
-})
 
 // updating user
-router.put("/users/:id", async(req, res) => {
+router.put("/update-users/:id", unauthorized, async(req, res) => {
     try {
         let id = req.params.id;
         let query = req.body;
@@ -71,18 +62,6 @@ router.put("/users/:id", async(req, res) => {
     } catch (error) {
         console.error("Erro ao atualizar um usuário pelo ID:", error);
         res.status(500).send("Erro ao atualizar um usuário pelo ID");
-    }
-})
-
-// delete user
-router.delete("/users/:id", async(req, res) => {
-    try {
-        let id = req.params.id;
-        let results = await User.deleteOne({ _id: new ObjectId(id) });
-        res.send(results).status(204);
-    } catch (error) {
-        console.error("Erro ao apagar um usuário pelo ID:", error);
-        res.status(500).send("Erro ao apagar um usuário pelo ID");
     }
 })
 
