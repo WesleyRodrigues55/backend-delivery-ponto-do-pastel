@@ -12,10 +12,10 @@ const router = express.Router();
 router.get("/get-users", unauthorized, async(req, res) => {
     try {
         const results = await User.find({});
-        res.status(200).send(results);
+        res.status(200).send({ results: results });
     } catch (error) {
         console.error("Erro ao buscar usuários:", error);
-        res.status(500).send("Erro ao buscar usuários");
+        res.status(500).send({ message: "Erro ao buscar usuários" });
     }
 });
 
@@ -26,10 +26,10 @@ router.get("/users-aggreg", unauthorized, async(req, res) => {
             { "$project": { "nome": 1, "email": 1, "whatsapp": 1 } },
             { "$sort": { "nome": -1 } },
         ]);
-        res.send(results).status(200);
+        res.status(200).send({ results: results });
     } catch (error) {
         console.error("Erro ao buscar usuários:", error);
-        res.status(500).send("Erro ao buscar usuários");
+        res.status(500).send({ message: "Erro ao buscar usuários" });
     }
 });
 
@@ -41,13 +41,13 @@ router.get("/users-by-id/:id", unauthorized, async(req, res) => {
         const results = await User.findOne(query);
 
         if (!results) {
-            res.status(404).send("Usuário não encontrado");
+            res.status(404).send({ message: "Usuário não encontrado" });
         } else {
-            res.send(results).status(200);
+            res.status(200).send({ results: results });
         }
     } catch (error) {
         console.error("Erro ao buscar usuário por ID:", error);
-        res.status(500).send("Erro ao buscar usuário por ID");
+        res.status(500).send({ message: "Erro ao buscar usuário por ID" });
     }
 });
 
@@ -55,13 +55,13 @@ router.get("/users-by-id/:id", unauthorized, async(req, res) => {
 // updating user
 router.put("/update-users/:id", unauthorized, async(req, res) => {
     try {
-        let id = req.params.id;
-        let query = req.body;
-        let results = await User.updateOne({ _id: new ObjectId(id) }, { $set: query });
-        res.send(results).status(204);
+        const id = req.params.id;
+        const query = req.body;
+        const results = await User.updateOne({ _id: new ObjectId(id) }, { $set: query });
+        res.status(204).send({ results: results });
     } catch (error) {
         console.error("Erro ao atualizar um usuário pelo ID:", error);
-        res.status(500).send("Erro ao atualizar um usuário pelo ID");
+        res.status(500).send({ message: "Erro ao atualizar um usuário pelo ID" });
     }
 })
 
