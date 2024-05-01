@@ -11,73 +11,57 @@ const router = express.Router();
 router.get("/get-products", async(req, res) => {
     try {
         const results = await Product.find({});
-        res.status(200).send(results);
+        res.status(200).send({ results: results });
     } catch (error) {
         console.error("Erro ao buscar produto", error);
-        res.status(500).send("Erro ao buscar produto");
+        res.status(500).send({ message: "Erro ao buscar produto" });
     }
 })
 
-router.get("/product-by-id/:nome", async(req, res) => {
+router.get("/product-by-id/:id", async(req, res) => {
     try {
-        let nome = req.params.nome;
-        nome = nome.toLowerCase();
-        const results = await Product.find({ nome: { $regex: new RegExp(nome, "i") } });
-        res.status(200).send(results);
+        const id = req.params.id;
+        const results = await Product.find({ _id: new ObjectId(id) });
+        res.status(200).send({ results: results });
     } catch (error) {
         console.error("Erro ao buscar produto pelo nome", error);
-        res.status(500).send("Erro ao buscar produto pelo nome");
+        res.status(500).send({ message: "Erro ao buscar produto pelo nome" });
     }
 })
 
-router.get("/product-ids/idAndPrice", async(req, res) => {
+router.get("/product-by-category/:category", async(req, res) => {
     try {
-        const results = await Product.find({}, '_id preco ');
-        const productIdAndPrice = results.map(product => ({
-            _id: product._id,
-            preco: product.preco,
-        }));
-        res.status(200).send(productIdAndPrice);
+        const category = req.params.category;
+        category = category.toLowerCase();
+        const results = await Product.find({ categoria: { $regex: new RegExp(category, "i") } });
+        res.status(200).send({ results: results });
     } catch (error) {
-        console.error("Erro ao buscar IDs de produtos", error);
-        res.status(500).send("Erro ao buscar IDs de produtos");
-    }
-})
-
-router.get("/product-price", async(req, res) => {
-    try {
-        const results = await Product.find({}, 'preco ');
-        const productPrice = results.map(product => ({
-            preco: product.preco,
-        }));
-        res.status(200).send(productPrice);
-    } catch (error) {
-        console.error("Erro ao buscar IDs de produtos", error);
-        res.status(500).send("Erro ao buscar IDs de produtos");
+        console.error("Erro ao buscar produto pelo nome", error);
+        res.status(500).send({ message: "Erro ao buscar produto pelo nome" });
     }
 })
 
 router.post("/post-product", unauthorized, async(req, res) => {
     try {
-        let query = req.body;
-        let newProduct = new Product(query);
-        let results = await newProduct.save();
-        res.send(results).status(204);
+        const query = req.body;
+        const newProduct = new Product(query);
+        const results = await newProduct.save();
+        res.status(204).send({ results: results });
     } catch (error) {
         console.error("Erro ao inserir um novo produto:", error);
-        res.status(500).send("Erro ao inserir um novo produto");
+        res.status(500).send({ message: "Erro ao inserir um novo produto" });
     }
 })
 
 router.put("/update-product/:id", unauthorized, async(req, res) => {
     try {
-        let id = req.params.id;
-        let query = req.body;
-        let results = await Product.findByIdAndUpdate({ _id: new ObjectId(id) }, { $set: query });
-        res.send(results).status(204);
+        const id = req.params.id;
+        const query = req.body;
+        const results = await Product.findByIdAndUpdate({ _id: new ObjectId(id) }, { $set: query });
+        res.status(204).send({ results: results });
     } catch (error) {
         console.error("Erro ao atualizar um  produto:", error);
-        res.status(500).send("Erro ao atualizar um produto");
+        res.status(500).send({ message: "Erro ao atualizar um produto" });
     }
 })
 
