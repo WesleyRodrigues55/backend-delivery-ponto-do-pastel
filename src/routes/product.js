@@ -18,6 +18,17 @@ router.get("/get-products", async(req, res) => {
     }
 })
 
+router.get("/get-products-by-category/:category", async(req, res) => {
+    try {
+        const category = req.params.category;
+        const results = await Product.find({ categoria: category });
+        res.status(200).send({ results: results });
+    } catch (error) {
+        console.error("Erro ao buscar produto", error);
+        res.status(500).send({ message: "Erro ao buscar produto" });
+    }
+})
+
 router.get("/product-by-id/:id", async(req, res) => {
     try {
         const id = req.params.id;
