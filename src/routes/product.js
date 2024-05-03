@@ -29,10 +29,11 @@ router.get("/product/:nome", async (req, res) => {
 
 router.get("/product-ids/idAndPrice", async (req, res) => {
     try {
-        const results = await Product.find({}, '_id preco ');
+        const results = await Product.find({}, '_id preco nome');
         const productIdAndPrice = results.map(product => ({
             _id: product._id,
             preco: product.preco,
+            nome: product.nome
         }));
         res.status(200).send(productIdAndPrice);
     } catch (error) {
@@ -70,7 +71,8 @@ router.put("/update-product/:id", async (req, res) => {
     try {
         let id = req.params.id;
         let query = req.body;
-        let results = await Product.findByIdAndUpdate({ _id: new ObjectId(id) }, { $set: query });
+        await Product.findByIdAndUpdate({ _id: id }, { $set: query });
+        let results = await Product.findById({ _id: id })
         res.send(results).status(204);
     } catch (error) {
         console.error("Erro ao atualizar um  produto:", error);
@@ -78,6 +80,20 @@ router.put("/update-product/:id", async (req, res) => {
     }
 })
 
+router.put("/update-product", async (req, res) => {
+    try {
+        let query = req.body.preco;
+        await Product.updateMany({}, { preco: query });
+        let results = await Product.find({});
+
+        console.log(query);
+        res.send(results).status(204);
+
+    } catch (error) {
+        console.error("Erro ao atualizar um  produto:", error);
+        res.status(500).send("Erro ao atualizar um produto");
+    }
+})
 
 router.delete("/product/:id", async (req, res) => {
     try {
