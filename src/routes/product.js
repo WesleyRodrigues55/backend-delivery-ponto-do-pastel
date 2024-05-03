@@ -4,6 +4,7 @@ import { ObjectId } from "mongodb";
 import Product from "../model/Product.js";
 import passport from 'passport';
 
+
 const unauthorized = passport.authenticate('jwt', { session: false });
 
 const router = express.Router();
@@ -40,24 +41,18 @@ router.get("/product-by-id/:id", async(req, res) => {
     }
 })
 
-router.get("/product-by-category/:category", async(req, res) => {
-    try {
-        const category = req.params.category;
-        category = category.toLowerCase();
-        const results = await Product.find({ categoria: { $regex: new RegExp(category, "i") } });
-        res.status(200).send({ results: results });
-    } catch (error) {
-        console.error("Erro ao buscar produto pelo nome", error);
-        res.status(500).send({ message: "Erro ao buscar produto pelo nome" });
-    }
-})
-
-router.post("/post-product", unauthorized, async(req, res) => {
+router.post("/insert-product", unauthorized, async(req, res) => {
     try {
         const query = req.body;
-        const newProduct = new Product(query);
-        const results = await newProduct.save();
-        res.status(204).send({ results: results });
+        const existsProducts = await Product.findOne({ nome: req.body.nome });
+
+        if (!existsProducts) {
+            const newProduct = new Product(query);
+            const results = await newProduct.save();
+            return res.status(200).send({ message: "Produto cadastro com sucesso!" });
+        }
+
+        res.status(200).send({ message: `Produto '${req.body.nome}' já existe na base de dados!` });
     } catch (error) {
         console.error("Erro ao inserir um novo produto:", error);
         res.status(500).send({ message: "Erro ao inserir um novo produto" });
@@ -69,7 +64,8 @@ router.put("/update-product/:id", unauthorized, async(req, res) => {
         const id = req.params.id;
         const query = req.body;
         const results = await Product.findByIdAndUpdate({ _id: new ObjectId(id) }, { $set: query });
-        res.status(204).send({ results: results });
+
+        res.status(200).send({ results: results });
     } catch (error) {
         console.error("Erro ao atualizar um  produto:", error);
         res.status(500).send({ message: "Erro ao atualizar um produto" });
