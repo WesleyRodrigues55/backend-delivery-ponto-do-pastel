@@ -2,8 +2,11 @@ import express from "express";
 import cors from "cors";
 import "./loadEnvironment.js";
 import "express-async-errors";
+import './middlewares/auth.js';
+import './middlewares/requests.js';
 
 import users from "./routes/users.js";
+import auth from "./routes/auth.js";
 import stock from "./routes/stock.js";
 import product from "./routes/product.js";
 import orderDetails from "./routes/orderDetails.js";
@@ -13,22 +16,31 @@ import cart from "./routes/cart.js";
 
 const PORT = process.env.PORT || 3001;
 const app = express();
+// app.use(cors());
 
-app.use(cors());
+app.use(cors({
+    //origin: 'http://localhost:5173/', // Especifique o domínio do seu aplicativo React
+    methods: ['GET', 'POST'], // Métodos permitidos
+    allowedHeaders: ['Content-Type', 'Authorization'], // Cabeçalhos permitidos na requisição
+    exposedHeaders: ['Content-Type', 'Authorization'], // Cabeçalhos expostos na resposta
+    credentials: true // Habilita o uso de credenciais (como cookies)
+}));
+
 app.use(express.json());
 
 // Load the /posts routes
-app.use("/api", users);
-app.use("/api", stock);
-app.use("/api", product);
-app.use("/api", orderDetails);
-app.use("/api", itemsCart);
-app.use("/api", ingredient);
-app.use("/api", cart);
+app.use("/api/users", users);
+app.use("/api/auth", auth);
+app.use("/api/stock", stock);
+app.use("/api/product", product);
+app.use("/api/order-datails", orderDetails);
+app.use("/api/items-cart", itemsCart);
+app.use("/api/ingedient", ingredient);
+app.use("/api/cart", cart);
 
 // Global error handling
 app.use((err, _req, res, next) => {
-    res.status(500).send("Uh oh! An unexpected error occured.")
+    res.status(500).send(`Uh oh! An unexpected error occured: ${err}`)
 })
 
 // start the Express server
