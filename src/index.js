@@ -19,11 +19,11 @@ const app = express();
 // app.use(cors());
 
 app.use(cors({
-    //origin: 'http://localhost:5173/', // Especifique o domínio do seu aplicativo React
-    methods: ['GET', 'POST'], // Métodos permitidos
-    allowedHeaders: ['Content-Type', 'Authorization'], // Cabeçalhos permitidos na requisição
-    exposedHeaders: ['Content-Type', 'Authorization'], // Cabeçalhos expostos na resposta
-    credentials: true // Habilita o uso de credenciais (como cookies)
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT'], // Métodos permitidos
+    allowedHeaders: ['*'], // Cabeçalhos permitidos na requisição
+    exposedHeaders: ['*'], // Cabeçalhos expostos na resposta
+    credentials: false // Habilita o uso de credenciais (como cookies)
 }));
 
 app.use(express.json());
