@@ -29,7 +29,7 @@ router.put("/generator-code-app/:whatsapp", async(req, res) => {
 
         const codeRandom = usersUtil.generatorCode();
         let results = await User.findOneAndUpdate({ whatsapp: wpp }, { $set: { codigo_verificacao: codeRandom } });
-        res.send({ results: "Código gerado com sucesso!" }).status(204);
+        res.status(200).send({ results: "Código gerado com sucesso!" });
 
         usersUtil.sendCodeWpp(validateWhatsapp, codeRandom);
     } catch (error) {
@@ -39,6 +39,7 @@ router.put("/generator-code-app/:whatsapp", async(req, res) => {
 });
 
 router.post("/authenticator-code-app", (req, res, next) => {
+    let data = req.body;
     passport.authenticate('local', { session: false },
         (err, user, info) => {
             if (err) {
@@ -53,12 +54,14 @@ router.post("/authenticator-code-app", (req, res, next) => {
             const { _id } = user
             const token = jwt.sign({ _id }, secretKey, { expiresIn: '1h' })
 
-            res.cookie('jwt', token, {
-                    httpOnly: false,
-                    secure: false
-                })
-                .status(200)
-                .send({ message: "Succesful Login!" })
+            const response = res.setHeader('Authorization', `${token}`).status(200).send({ msg: "Succesful Login!" });
+
+            // res.cookie('jwt', token, {
+            //         httpOnly: false,
+            //         secure: false
+            //     })
+            //     .status(200)
+            //     .send({ message: "Succesful Login!" })
 
         })(req, res, next)
 })
