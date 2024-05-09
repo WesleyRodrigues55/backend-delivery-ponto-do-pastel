@@ -1,8 +1,9 @@
 import express from "express";
-import "../config/db.js";
 import { ObjectId } from "mongodb";
-import Product from "../model/Product.js";
 import passport from 'passport';
+import "../config/db.js";
+import Product from "../model/Product.js";
+
 
 const unauthorized = passport.authenticate('jwt', { session: false });
 
@@ -31,23 +32,8 @@ router.get("/get-products-by-category/:category", async (req, res) => {
 
 router.get("/product-by-id/:id", async (req, res) => {
     try {
-        const results = await Product.find({}, '_id preco ');
-        const productIdAndPrice = results.map(product => ({
-            _id: product._id,
-            preco: product.preco,
-        }));
-        res.status(200).send(productIdAndPrice);
-    } catch (error) {
-        console.error("Erro ao buscar produto pelo nome", error);
-        res.status(500).send({ message: "Erro ao buscar produto pelo nome" });
-    }
-})
-
-router.get("/product-by-category/:category", async (req, res) => {
-    try {
-        const category = req.params.category;
-        category = category.toLowerCase();
-        const results = await Product.find({ categoria: { $regex: new RegExp(category, "i") } });
+        const id = req.params.id;
+        const results = await Product.find({ _id: new ObjectId(id) });
         res.status(200).send({ results: results });
     } catch (error) {
         console.error("Erro ao buscar produto pelo nome", error);
@@ -55,12 +41,18 @@ router.get("/product-by-category/:category", async (req, res) => {
     }
 })
 
-router.post("/post-product", unauthorized, async (req, res) => {
+router.post("/insert-product", unauthorized, async (req, res) => {
     try {
         const query = req.body;
-        const newProduct = new Product(query);
-        const results = await newProduct.save();
-        res.status(204).send({ results: results });
+        const existsProducts = await Product.findOne({ nome: req.body.nome });
+
+        if (!existsProducts) {
+            const newProduct = new Product(query);
+            const results = await newProduct.save();
+            return res.status(200).send({ message: "Produto cadastro com sucesso!" });
+        }
+
+        res.status(200).send({ message: `Produto '${req.body.nome}' já existe na base de dados!` });
     } catch (error) {
         console.error("Erro ao inserir um novo produto:", error);
         res.status(500).send({ message: "Erro ao inserir um novo produto" });
@@ -69,26 +61,16 @@ router.post("/post-product", unauthorized, async (req, res) => {
 
 router.put("/update-product/:id", unauthorized, async (req, res) => {
     try {
-        let id = req.params.id;
-        let query = req.body;
-        let results = await Product.findByIdAndUpdate({ _id: new ObjectId(id) }, { $set: query });
-        res.send(results).status(204);
+        const id = req.params.id;
+        const query = req.body;
+        const results = await Product.findByIdAndUpdate({ _id: new ObjectId(id) }, { $set: query });
+
+        res.status(200).send({ results: results });
     } catch (error) {
         console.error("Erro ao atualizar um  produto:", error);
-        res.status(500).send("Erro ao atualizar um produto");
+        res.status(500).send({ message: "Erro ao atualizar um produto" });
     }
 })
 
-
-router.delete("/product/:id", async (req, res) => {
-    try {
-        let id = req.params.id;
-        let results = await Product.deleteOne({ _id: new ObjectId(id) });
-        res.send(results).status(204);
-    } catch (error) {
-        console.error("Erro ao atualizar um  produto:", error);
-        res.status(500).send("Erro ao atualizar um produto");
-    }
-})
 
 export default router;
