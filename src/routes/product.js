@@ -59,26 +59,29 @@ router.get("/product-by-id/:id", async(req, res) => {
 router.get("/product-by-id-and-ingredients/:id", async(req, res) => {
     try {
         const id = req.params.id;
-        const results = await Product.aggregate([{
-                    $match: {
-                        _id: new ObjectId(id)
-                    }
-                },
-                {
-                    $lookup: {
-                        from: "ingrediente",
-                        localField: "ingrediente",
-                        foreignField: "ingrediente_id",
-                        as: "ingredientesAdicionais"
-                    }
-                }
 
-            ])
-            //agregation
+        if (!id) return res.status(400).send({ message: "Erro ao buscar produto pelo ID" });
+
+        const results = await Product.aggregate([{
+                $match: {
+                    _id: new ObjectId(id)
+                }
+            },
+            {
+                $lookup: {
+                    from: "ingrediente",
+                    localField: "ingrediente",
+                    foreignField: "ingrediente_id",
+                    as: "ingredientesAdicionais"
+                }
+            }
+
+        ])
+
         res.status(200).send({ results: results });
     } catch (error) {
-        console.error("Erro ao buscar produto pelo nome", error);
-        res.status(500).send({ message: "Erro ao buscar produto pelo nome" });
+        console.error("Erro ao buscar produto pelo ID", error);
+        res.status(500).send({ message: "Erro ao buscar produto pelo ID" });
     }
 })
 
