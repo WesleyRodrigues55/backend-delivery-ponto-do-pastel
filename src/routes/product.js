@@ -1,15 +1,15 @@
 import express from "express";
-import "../config/db.js";
 import { ObjectId } from "mongodb";
-import Product from "../model/Product.js";
 import passport from 'passport';
+import "../config/db.js";
+import Product from "../model/Product.js";
 
 
 const unauthorized = passport.authenticate('jwt', { session: false });
 
 const router = express.Router();
 
-router.get("/get-products", async(req, res) => {
+router.get("/get-products", async (req, res) => {
     try {
         const results = await Product.find({});
         res.status(200).send({ results: results });
@@ -19,7 +19,7 @@ router.get("/get-products", async(req, res) => {
     }
 })
 
-router.get("/get-products-by-category/:category", async(req, res) => {
+router.get("/get-products-by-category/:category", async (req, res) => {
     try {
         const category = req.params.category;
         const results = await Product.find({ categoria: category });
@@ -30,7 +30,7 @@ router.get("/get-products-by-category/:category", async(req, res) => {
     }
 })
 
-router.get("/product-by-id/:id", async(req, res) => {
+router.get("/product-by-id/:id", async (req, res) => {
     try {
         const id = req.params.id;
         const results = await Product.find({ _id: new ObjectId(id) });
@@ -41,7 +41,34 @@ router.get("/product-by-id/:id", async(req, res) => {
     }
 })
 
-router.post("/insert-product", unauthorized, async(req, res) => {
+router.get("/product-by-id-and-ingredients/:id", async (req, res) => {
+    try {
+        const id = req.params.id;
+        const results = await Product.aggregate([
+            {
+                $match: {
+                    _id: new ObjectId(id)
+                }
+            },
+            {
+                $lookup: {
+                    from: "ingrediente",
+                    localField: "ingrediente",
+                    foreignField: "ingrediente_id",
+                    as: "ingredientesAdicionais"
+                }
+            }
+
+        ])
+        //agregation
+        res.status(200).send({ results: results });
+    } catch (error) {
+        console.error("Erro ao buscar produto pelo nome", error);
+        res.status(500).send({ message: "Erro ao buscar produto pelo nome" });
+    }
+})
+
+router.post("/insert-product", unauthorized, async (req, res) => {
     try {
         const query = req.body;
         const existsProducts = await Product.findOne({ nome: req.body.nome });
@@ -59,7 +86,7 @@ router.post("/insert-product", unauthorized, async(req, res) => {
     }
 })
 
-router.put("/update-product/:id", unauthorized, async(req, res) => {
+router.put("/update-product/:id", unauthorized, async (req, res) => {
     try {
         const id = req.params.id;
         const query = req.body;
@@ -71,5 +98,6 @@ router.put("/update-product/:id", unauthorized, async(req, res) => {
         res.status(500).send({ message: "Erro ao atualizar um produto" });
     }
 })
+
 
 export default router;
