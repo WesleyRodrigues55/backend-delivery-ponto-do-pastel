@@ -95,7 +95,8 @@ router.post("/login-system", (req, res, next) => {
             }
 
             const { _id } = user
-            const token = jwt.sign({ _id }, secretKey, { expiresIn: '1h' })
+            const token = jwt.sign({ _id }, secretKey)
+                // const token = jwt.sign({ _id }, secretKey, { expiresIn: '1h' })
 
             const response = res.setHeader('Authorization', `${token}`).status(200).send({ msg: "Succesful Login!" });
 
@@ -120,19 +121,16 @@ router.post("/register", async(req, res) => {
 });
 
 
-router.post("/validar-token", async(req, res) => {
-    const token = req.body.token;
-
+router.post("/validar-token", passport.authenticate('jwt', { session: false }), async(req, res) => {
+    const token = req.headers.authorization;
     if (!token) {
         return res.status(400).json({ msg: 'Token não fornecido.' });
     }
 
     try {
-        jwt.verify(token,
-            import.meta.env.SECRET_KEY);
-        return res.json({ validado: true });
+        return res.status(200).json({ validado: true });
     } catch (error) {
-        return res.json({ validado: false });
+        return res.status(501).json({ validado: false });
     }
 });
 
