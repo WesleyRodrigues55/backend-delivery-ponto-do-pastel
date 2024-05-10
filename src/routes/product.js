@@ -19,18 +19,13 @@ router.get("/get-products", async(req, res) => {
     }
 })
 
-router.get("/get-products-pagination", async(req, res) => {
+router.get("/get-products-all", async(req, res) => {
     try {
-        const offset = parseInt(req.query.offset) || 0;
-        const limit = parseInt(req.query.limit) || 10;
-
-        const results = await Product.find({}).sort({ ativo: -1 }).skip(offset).limit(limit);
-        const totalCount = await Product.countDocuments({});
-
-        res.status(200).send({ results, totalCount });
+        const results = await Product.find({});
+        res.status(200).send({ results: results });
     } catch (error) {
-        console.error("Erro ao buscar produtos", error);
-        res.status(500).send({ message: "Erro ao buscar produtos" });
+        console.error("Erro ao buscar produto", error);
+        res.status(500).send({ message: "Erro ao buscar produto" });
     }
 });
 
