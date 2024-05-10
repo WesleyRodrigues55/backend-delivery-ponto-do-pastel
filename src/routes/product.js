@@ -1,8 +1,8 @@
 import express from "express";
-import "../config/db.js";
 import { ObjectId } from "mongodb";
-import Product from "../model/Product.js";
 import passport from 'passport';
+import "../config/db.js";
+import Product from "../model/Product.js";
 
 
 const unauthorized = passport.authenticate('jwt', { session: false });
@@ -53,6 +53,32 @@ router.get("/product-by-id/:id", async(req, res) => {
     } catch (error) {
         console.error("Erro ao buscar produto pelo id", error);
         res.status(500).send({ message: "Erro ao buscar produto pelo id" });
+    }
+})
+
+router.get("/product-by-id-and-ingredients/:id", async(req, res) => {
+    try {
+        const id = req.params.id;
+        const results = await Product.aggregate([{
+                    $match: {
+                        _id: new ObjectId(id)
+                    }
+                },
+                {
+                    $lookup: {
+                        from: "ingrediente",
+                        localField: "ingrediente",
+                        foreignField: "ingrediente_id",
+                        as: "ingredientesAdicionais"
+                    }
+                }
+
+            ])
+            //agregation
+        res.status(200).send({ results: results });
+    } catch (error) {
+        console.error("Erro ao buscar produto pelo nome", error);
+        res.status(500).send({ message: "Erro ao buscar produto pelo nome" });
     }
 })
 
