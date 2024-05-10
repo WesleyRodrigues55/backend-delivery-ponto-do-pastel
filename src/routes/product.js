@@ -21,7 +21,7 @@ router.get("/get-products", async(req, res) => {
 
 router.get("/get-products-all", async(req, res) => {
     try {
-        const results = await Product.find({});
+        const results = await Product.find({}).sort({ ativo: -1 });
         res.status(200).send({ results: results });
     } catch (error) {
         console.error("Erro ao buscar produto", error);
