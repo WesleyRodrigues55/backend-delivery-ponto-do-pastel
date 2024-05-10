@@ -1,18 +1,18 @@
-import express from "express";
 import cors from "cors";
-import "./loadEnvironment.js";
+import express from "express";
 import "express-async-errors";
+import "./loadEnvironment.js";
 import './middlewares/auth.js';
 import './middlewares/requests.js';
 
-import users from "./routes/users.js";
 import auth from "./routes/auth.js";
-import stock from "./routes/stock.js";
-import product from "./routes/product.js";
-import orderDetails from "./routes/orderDetails.js";
-import itemsCart from "./routes/itemsCart.js";
-import ingredient from "./routes/ingredient.js";
 import cart from "./routes/cart.js";
+import ingredient from "./routes/ingredient.js";
+import itemsCart from "./routes/itemsCart.js";
+import orderDetails from "./routes/orderDetails.js";
+import product from "./routes/product.js";
+import stock from "./routes/stock.js";
+import users from "./routes/users.js";
 
 const PORT = process.env.PORT || 3001;
 const app = express();
@@ -35,7 +35,7 @@ app.use("/api/stock", stock);
 app.use("/api/product", product);
 app.use("/api/order-datails", orderDetails);
 app.use("/api/items-cart", itemsCart);
-app.use("/api/ingedient", ingredient);
+app.use("/api/ingredient", ingredient);
 app.use("/api/cart", cart);
 
 // Global error handling
