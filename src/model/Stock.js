@@ -25,7 +25,7 @@ const stockSchema = new mongoose.Schema({
         lowercase: true
     },
     valor: {
-        type: Number,
+        type: String,
         required: true,
     },
     ativo: {
