@@ -6,7 +6,7 @@ const ingredientSchema = new mongoose.Schema({
         required: true,
     },
     valor: {
-        type: Number,
+        type: String,
         required: true,
     },
     categoria: {

@@ -3,23 +3,6 @@ import mongoose from 'mongoose';
 import Cart from './Cart.js';
 import User from './User.js';
 
-const listaEnderecoSchema = new mongoose.Schema({
-    bairro: {
-        type: String,
-        required: true,
-    },
-    numero: {
-        type: Number,
-        required: true,
-    },
-    complemento: {
-        type: String,
-    },
-    referencia: {
-        type: String,
-    },
-});
-
 const listaPagamentoScheme = new mongoose.Schema({
     codigo_pagamento: {
         type: String,
@@ -54,20 +37,20 @@ const oderDetailsSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: User
     },
-    lista_endereco: {
-        type: [listaEnderecoSchema],
+    endereco_usuario_id: {
+        type: mongoose.Schema.Types.ObjectId,
         required: true,
     },
     valor: {
-        type: Number,
+        type: String,
         required: true,
     },
     taxa_entrega: {
-        type: Number,
+        type: String,
         required: true,
     },
     valor_total: {
-        type: Number,
+        type: String,
         required: true,
     },
     lista_pagamento: {
