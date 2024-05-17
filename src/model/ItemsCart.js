@@ -33,11 +33,11 @@ const itemsCartSchema = new mongoose.Schema({
         required: true,
     },
     preco_unitario: {
-        type: Number,
+        type: String,
         required: true,
     },
     preco_total: {
-        type: Number,
+        type: String,
         required: true,
     },
 }, {

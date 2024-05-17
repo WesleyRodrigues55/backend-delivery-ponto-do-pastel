@@ -28,8 +28,13 @@ router.put("/generator-code-app/:whatsapp", async(req, res) => {
         }
 
         const codeRandom = usersUtil.generatorCode();
-        let results = await User.findOneAndUpdate({ whatsapp: wpp }, { $set: { codigo_verificacao: codeRandom } });
-        res.status(200).send({ results: "Código gerado com sucesso!" });
+        const results = await User.findOneAndUpdate({ whatsapp: wpp }, { $set: { codigo_verificacao: codeRandom } });
+        res.status(200).send({
+            results: {
+                message: "Código gerado com sucesso!",
+                userId: results['_id']
+            }
+        });
 
         usersUtil.sendCodeWpp(validateWhatsapp, codeRandom);
     } catch (error) {
