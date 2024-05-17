@@ -7,7 +7,7 @@ const unauthorized = passport.authenticate('jwt', { session: false });
 
 const router = express.Router();
 
-router.get("/get-ingredients", async (req, res) => {
+router.get("/get-ingredients", async(req, res) => {
     try {
         const results = await Ingredient.find({});
         res.status(200).send({ results: results });

@@ -14,6 +14,7 @@ import product from "./routes/product.js";
 import stock from "./routes/stock.js";
 import users from "./routes/users.js";
 import statusStore from "./routes/statusStore.js";
+import orderDeliveryStatus from "./routes/orderDeliveryStatus.js";
 
 const PORT = process.env.PORT || 3001;
 const app = express();
@@ -39,6 +40,7 @@ app.use("/api/items-cart", itemsCart);
 app.use("/api/ingredient", ingredient);
 app.use("/api/cart", cart);
 app.use("/api/store", statusStore);
+app.use("/api/order-delivery-status", orderDeliveryStatus);
 
 // Global error handling
 app.use((err, _req, res, next) => {
