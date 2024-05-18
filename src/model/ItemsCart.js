@@ -40,6 +40,10 @@ const itemsCartSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    observacao: {
+        type: String,
+        // required: true,
+    },
 }, {
     versionKey: false
 });
