@@ -12,6 +12,10 @@ const ingredientSchema = new mongoose.Schema({
     nome: {
         type: String,
         required: true,
+    },
+    preco: {
+        type: String,
+        required: true
     }
 })
 

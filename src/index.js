@@ -35,7 +35,7 @@ app.use("/api/users", users);
 app.use("/api/auth", auth);
 app.use("/api/stock", stock);
 app.use("/api/product", product);
-app.use("/api/order-datails", orderDetails);
+app.use("/api/order-details", orderDetails);
 app.use("/api/items-cart", itemsCart);
 app.use("/api/ingredient", ingredient);
 app.use("/api/cart", cart);
