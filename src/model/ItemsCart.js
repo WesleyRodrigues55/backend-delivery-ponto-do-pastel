@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
-import Ingredient from './Ingredient.js';
 import Cart from './Cart.js';
+import Ingredient from './Ingredient.js';
 import User from './User.js';
 
 const ingredientSchema = new mongoose.Schema({
