@@ -97,6 +97,8 @@ router.get("/get-cart-open-with-items-cart/:idUser", unauthorized, async(req, re
                     "itens_carrinho.lista_ingredientes.preco": 1,
                     "itens_carrinho.lista_ingredientes.nome": 1,
                     "itens_carrinho.produto.nome": 1,
+                    "itens_carrinho.produto.imagem_produto": 1,
+                    "itens_carrinho.produto.preco": 1,
                     "itens_carrinho.produto._id": 1,
                     "endereco_usuario._id": 1,
                     "endereco_usuario.cidade": 1,
@@ -156,30 +158,30 @@ router.get("/get-cart-by-id/:id", unauthorized, async(req, res) => {
                     as: "endereco_usuario",
                 }
             },
-            {
-                $project: {
-                    "_id": 1,
-                    "usuario_id": 1,
-                    "status_compra": 1,
-                    "valor_compra": 1,
-                    "valor_total_compra": 1,
-                    "taxa_fixa": 1,
-                    "valor_total_com_taxa": 1,
-                    "itens_carrinho._id": 1,
-                    "itens_carrinho.produto_id": 1,
-                    "itens_carrinho.quantidade": 1,
-                    "itens_carrinho.quantidade": 1,
-                    "itens_carrinho.preco_total": 1,
-                    "itens_carrinho.lista_ingredientes.id": 1,
-                    "itens_carrinho.lista_ingredientes.preco": 1,
-                    "endereco_usuario._id": 1,
-                    "endereco_usuario.cidade": 1,
-                    "endereco_usuario.bairro": 1,
-                    "endereco_usuario.rua": 1,
-                    "endereco_usuario.numero": 1,
-                    "endereco_usuario.complemento": 1,
-                }
-            }
+            // {
+            //     $project: {
+            //         "_id": 1,
+            //         "usuario_id": 1,
+            //         "status_compra": 1,
+            //         "valor_compra": 1,
+            //         "valor_total_compra": 1,
+            //         "taxa_fixa": 1,
+            //         "valor_total_com_taxa": 1,
+            //         "itens_carrinho._id": 1,
+            //         "itens_carrinho.produto_id": 1,
+            //         "itens_carrinho.quantidade": 1,
+            //         "itens_carrinho.quantidade": 1,
+            //         "itens_carrinho.preco_total": 1,
+            //         "itens_carrinho.lista_ingredientes.id": 1,
+            //         "itens_carrinho.lista_ingredientes.preco": 1,
+            //         "endereco_usuario._id": 1,
+            //         "endereco_usuario.cidade": 1,
+            //         "endereco_usuario.bairro": 1,
+            //         "endereco_usuario.rua": 1,
+            //         "endereco_usuario.numero": 1,
+            //         "endereco_usuario.complemento": 1,
+            //     }
+            // }
         ])
 
         if (!results) {

@@ -61,6 +61,9 @@ const oderDetailsSchema = new mongoose.Schema({
         type: Date,
         required: true,
     },
+    status_pedido: {
+        type: String,
+    }
 }, {
     versionKey: false
 });

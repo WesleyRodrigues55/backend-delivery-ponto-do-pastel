@@ -30,7 +30,7 @@ const itemsCartSchema = new mongoose.Schema({
     },
     lista_ingredientes: {
         type: [ingredientSchema],
-        required: true,
+        // required: true,
     },
     quantidade: {
         type: Number,
