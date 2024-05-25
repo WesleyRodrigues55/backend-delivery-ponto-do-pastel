@@ -1,7 +1,6 @@
 import express from "express";
 import "../config/db.js";
 import { ObjectId } from "mongodb";
-import cartUtil from "../utils/cart.js";
 import ItemsCart from "../model/ItemsCart.js";
 import Cart from "../model/Cart.js";
 import passport from 'passport';
