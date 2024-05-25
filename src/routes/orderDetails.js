@@ -11,7 +11,7 @@ const router = express.Router();
 
 router.get("/get-approved-orders", unauthorized, async(req, res) => {
     try {
-        const results = await OrderDetails.find({ status_pedido: 'aprovado' });
+        const results = await OrderDetails.find({ status_pedido: 'pendente' });
         return res.status(200).send({ results: results });
 
     } catch (error) {
