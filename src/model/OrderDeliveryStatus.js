@@ -1,12 +1,17 @@
 import mongoose from 'mongoose';
 
 import Cart from './Cart.js';
+import OrderDetails from './OrderDetails.js';
 
 const orderDeliveryStatuschema = new mongoose.Schema({
     carrinho_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: Cart,
-        unique: true,
+        required: true,
+    },
+    detalhes_do_pedido_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: OrderDetails,
         required: true,
     },
     status_pedido: {
@@ -19,7 +24,7 @@ const orderDeliveryStatuschema = new mongoose.Schema({
     },
     tempo_entrega: {
         type: String,
-        required: true
+        // required: true
     }
 }, {
     versionKey: false

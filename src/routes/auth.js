@@ -74,8 +74,8 @@ router.post("/authenticator-code-app", (req, res, next) => {
 router.post("/register-with-wpp", async(req, res) => {
     const query = req.body;
     try {
-        const newUser = await User.create(query);
-        return res.json({ message: "User created!" });
+        await User.create(query);
+        return res.status(200).json({ error: "User created!" });
     } catch (err) {
         console.error("User already exists!", err);
         return res.status(400).json({ error: "User already exists!" });

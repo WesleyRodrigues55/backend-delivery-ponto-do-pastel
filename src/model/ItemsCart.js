@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
-import Ingredient from './Ingredient.js';
 import Cart from './Cart.js';
+import Ingredient from './Ingredient.js';
 import User from './User.js';
 
 const ingredientSchema = new mongoose.Schema({
@@ -30,7 +30,7 @@ const itemsCartSchema = new mongoose.Schema({
     },
     lista_ingredientes: {
         type: [ingredientSchema],
-        required: true,
+        // required: true,
     },
     quantidade: {
         type: Number,

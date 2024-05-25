@@ -18,9 +18,13 @@ const cartSchema = new mongoose.Schema({
     },
     data_fechamento: {
         type: Date,
+        // required: true,
+    },
+    valor_total_com_taxa: {
+        type: String,
         required: true,
     },
-    valor_total: {
+    valor_total_com_taxa: {
         type: String,
         required: true,
     },
