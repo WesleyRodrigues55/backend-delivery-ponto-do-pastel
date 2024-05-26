@@ -94,6 +94,7 @@ router.get("/get-cart-open-with-items-cart/:idUser", unauthorized, async(req, re
                     "itens_carrinho.quantidade": 1,
                     "itens_carrinho.quantidade": 1,
                     "itens_carrinho.preco_total": 1,
+                    "itens_carrinho.lista_ingredientes.nome": 0,
                     "itens_carrinho.lista_ingredientes._id": 1,
                     "itens_carrinho.lista_ingredientes.preco": 1,
                     "itens_carrinho.produto.nome": 1,
