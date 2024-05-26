@@ -3,6 +3,7 @@ import passport from 'passport';
 import "../config/db.js";
 import ItemsCart from "../model/ItemsCart.js";
 import Cart from "../model/Cart.js";
+import { ObjectId } from "mongodb";
 
 const unauthorized = passport.authenticate('jwt', { session: false });
 
@@ -12,7 +13,7 @@ const router = express.Router();
 router.post('/insert_item_in_cart/:idusuario', unauthorized, async(req, res) => {
     const idUser = req.params.idusuario
     try {
-        const { carrinho_id, ...query } = req.body;
+        const { carrinho_id, preco_total, ...query } = req.body;
 
         const getCartOpen = await Cart.aggregate([{
             $match: {
@@ -25,19 +26,37 @@ router.post('/insert_item_in_cart/:idusuario', unauthorized, async(req, res) => 
 
         if (getCartOpen != '') {
             const idCartExists = getCartOpen[0]._id;
-            const newItemCart = new ItemsCart({ carrinho_id: idCartExists, ...query });
+            const statusValorTotalCartComTaxa = getCartOpen[0].valor_total_com_taxa;
+            const statusValorTotalCart = getCartOpen[0].valor_total_compra;
+
+            const sumValorComTaxa = Number(statusValorTotalCartComTaxa) + Number(preco_total);
+            const sumValorCompra = Number(statusValorTotalCart) + Number(preco_total);
+
+            const insertCartOpen = {
+                "valor_total_com_taxa": sumValorComTaxa.toString(),
+                "valor_total_compra": sumValorCompra.toString()
+            }
+
+            await Cart.findByIdAndUpdate({ _id: new ObjectId(idCartExists) }, { $set: insertCartOpen });
+
+            const newItemCart = new ItemsCart({
+                carrinho_id: new ObjectId(idCartExists),
+                preco_total: preco_total,
+                ...query
+            });
             const results = await newItemCart.save();
             return res.status(200).send({ message: "Item do carrinho cadastro com sucesso!" });
         } else {
-            console.error('Carrinho não existe aqui')
             const now = new Date();
+            const taxaFixa = "10.00"
+            const valoTotalComTaxa = Number(preco_total) + Number(taxaFixa);
             const createCart = {
                 "usuario_id": new ObjectId(idUser),
                 "status_compra": "aberto",
                 "data_abertura": now.toISOString(),
-                "taxa_fixa": "10.00",
-                "valor_total_com_taxa": "0.00",
-                "valor_total_compra": "0.00"
+                "taxa_fixa": taxaFixa.toString(),
+                "valor_total_com_taxa": valoTotalComTaxa.toString(),
+                "valor_total_compra": preco_total.toString()
             }
             const newCart = new Cart(createCart);
             const results = await newCart.save();
@@ -46,8 +65,11 @@ router.post('/insert_item_in_cart/:idusuario', unauthorized, async(req, res) => 
             if (!results) {
                 return res.status(400).send({ message: "Não foi possível criar um novo carrinho" });
             } else {
-                console.error(createdId)
-                const newItemCart = new ItemsCart({ carrinho_id: createdId, ...query });
+                const newItemCart = new ItemsCart({
+                    carrinho_id: new ObjectId(createdId),
+                    preco_total: preco_total,
+                    ...query
+                });
                 const results = await newItemCart.save();
                 return res.status(200).send({ message: "Carrinho criado com sucesso!" });
             }

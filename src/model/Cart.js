@@ -20,11 +20,15 @@ const cartSchema = new mongoose.Schema({
         type: Date,
         // required: true,
     },
+    taxa_fixa: {
+        type: String,
+        required: true
+    },
     valor_total_com_taxa: {
         type: String,
         required: true,
     },
-    valor_total_com_taxa: {
+    valor_total_compra: {
         type: String,
         required: true,
     },
