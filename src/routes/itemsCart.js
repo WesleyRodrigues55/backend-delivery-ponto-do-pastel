@@ -48,7 +48,7 @@ router.post('/insert_item_in_cart/:idusuario', unauthorized, async(req, res) => 
             return res.status(200).send({ message: "Item do carrinho cadastro com sucesso!" });
         } else {
             const now = new Date();
-            const taxaFixa = "10.00"
+            const taxaFixa = "10"
             const valoTotalComTaxa = Number(preco_total) + Number(taxaFixa);
             const createCart = {
                 "usuario_id": new ObjectId(idUser),
@@ -79,6 +79,40 @@ router.post('/insert_item_in_cart/:idusuario', unauthorized, async(req, res) => 
     } catch (error) {
         console.error("Erro ao inserir um novo produto:", error);
         res.status(500).send({ message: "Erro ao inserir um novo produto" });
+    }
+});
+
+router.delete('/delete-item-cart-by-id/:idItemCart', unauthorized, async(req, res) => {
+    const idItemsCart = req.params.idItemCart;
+    try {
+
+        const searchItemCart = await ItemsCart.find({ _id: new ObjectId(idItemsCart) })
+        const carrinhoId = searchItemCart[0].carrinho_id;
+        const precoTotalItemCart = searchItemCart[0].preco_total;
+
+        const searchCartByID = await Cart.find({ _id: new ObjectId(carrinhoId) })
+        const valorTotalComTaxa = searchCartByID[0].valor_total_com_taxa
+        const valorTotalCompra = searchCartByID[0].valor_total_compra
+        const sumValorComTaxa = Number(valorTotalComTaxa) - Number(precoTotalItemCart);
+        const sumValorCompra = Number(valorTotalCompra) - Number(precoTotalItemCart);
+
+        const updateCartOpen = {
+            "valor_total_com_taxa": sumValorComTaxa.toString(),
+            "valor_total_compra": sumValorCompra.toString()
+        }
+
+        const updatedValuesCart = await Cart.findByIdAndUpdate({ _id: new ObjectId(carrinhoId) }, { $set: updateCartOpen });
+
+        const results = await ItemsCart.deleteMany({ _id: new ObjectId(idItemsCart) })
+
+        if (!results) {
+            res.status(400).send({ message: 'Ocorreu um erro em deleter o item do carrinho.' });
+        }
+
+        res.status(200).send({ results: results });
+    } catch (error) {
+        console.error("Erro ao atualizar o ativo do produto:", error);
+        res.status(500).send({ message: "Erro ao atualizar o ativo do produto" });
     }
 });
 
