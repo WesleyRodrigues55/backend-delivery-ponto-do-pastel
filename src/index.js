@@ -22,15 +22,14 @@ const app = express();
 
 app.use(cors({
     origin: '*',
-    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos permitidos
-    allowedHeaders: ['*'], // Cabeçalhos permitidos na requisição
-    exposedHeaders: ['*'], // Cabeçalhos expostos na resposta
-    credentials: false // Habilita o uso de credenciais (como cookies)
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['*'],
+    exposedHeaders: ['*'],
+    credentials: false
 }));
 
 app.use(express.json());
 
-// Load the /posts routes
 app.use("/api/users", users);
 app.use("/api/auth", auth);
 app.use("/api/stock", stock);
@@ -42,12 +41,10 @@ app.use("/api/cart", cart);
 app.use("/api/store", statusStore);
 app.use("/api/order-delivery-status", orderDeliveryStatus);
 
-// Global error handling
 app.use((err, _req, res, next) => {
     res.status(500).send(`Uh oh! An unexpected error occured: ${err}`)
 })
 
-// start the Express server
 app.listen(PORT, () => {
     console.log(`Server is running on port: ${PORT}`);
 });
