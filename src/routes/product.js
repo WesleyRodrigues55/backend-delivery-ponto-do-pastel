@@ -32,7 +32,7 @@ router.get("/get-products-all", async(req, res) => {
 router.get("/get-products-by-category/:category", async(req, res) => {
     try {
         const category = req.params.category;
-        const results = await Product.find({ categoria: category });
+        const results = await Product.find({ categoria: category, ativo: 1 });
         res.status(200).send({ results: results });
     } catch (error) {
         console.error("Erro ao buscar produto", error);
