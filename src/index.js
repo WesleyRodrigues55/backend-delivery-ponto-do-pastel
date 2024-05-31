@@ -16,6 +16,7 @@ import users from "./routes/users.js";
 import statusStore from "./routes/statusStore.js";
 import orderDeliveryStatus from "./routes/orderDeliveryStatus.js";
 import userAddress from "./routes/userAddress.js";
+import payment from "./routes/payment.js";
 
 const PORT = process.env.PORT || 3001;
 const app = express();
@@ -42,6 +43,7 @@ app.use("/api/cart", cart);
 app.use("/api/store", statusStore);
 app.use("/api/order-delivery-status", orderDeliveryStatus);
 app.use("/api/user-address", userAddress);
+app.use("/api/payment", payment);
 
 app.use((err, _req, res, next) => {
     res.status(500).send(`Uh oh! An unexpected error occured: ${err}`)
