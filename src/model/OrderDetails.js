@@ -6,7 +6,7 @@ import User from './User.js';
 const listaPagamentoScheme = new mongoose.Schema({
     codigo_pagamento: {
         type: String,
-        required: true,
+        // required: true,
     },
     forma_pagamento: {
         type: String,
@@ -15,16 +15,16 @@ const listaPagamentoScheme = new mongoose.Schema({
     },
     qrcode: {
         type: String,
-        required: true,
+        // required: true,
     },
     status_pagamento: {
         type: String,
-        required: true,
+        // required: true,
         lowercase: true,
     },
     link_pagamento: {
         type: String,
-        required: true,
+        // required: true,
     },
 });
 
@@ -39,23 +39,22 @@ const oderDetailsSchema = new mongoose.Schema({
     },
     endereco_usuario_id: {
         type: mongoose.Schema.Types.ObjectId,
-        required: true,
+        // required: true,
     },
-    valor: {
-        type: String,
-        required: true,
-    },
-    taxa_entrega: {
-        type: String,
-        required: true,
-    },
+    // valor: {
+    //     type: String,
+    //     required: true,
+    // },
+    // taxa_entrega: {
+    //     type: String,
+    //     required: true,
+    // },
     valor_total: {
         type: String,
         required: true,
     },
     lista_pagamento: {
         type: [listaPagamentoScheme],
-        required: true,
     },
     data_pedido: {
         type: Date,
