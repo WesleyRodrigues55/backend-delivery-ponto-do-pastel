@@ -5,7 +5,7 @@ import User from './User.js';
 
 const listaPagamentoScheme = new mongoose.Schema({
     codigo_pagamento: {
-        type: String,
+        type: Number,
         // required: true,
     },
     forma_pagamento: {
@@ -26,6 +26,9 @@ const listaPagamentoScheme = new mongoose.Schema({
         type: String,
         // required: true,
     },
+    email_usuario: {
+        type: String
+    }
 });
 
 const oderDetailsSchema = new mongoose.Schema({
