@@ -12,11 +12,11 @@ const userAddressSchema = new mongoose.Schema({
         // required: true,
     },
     bairro: {
-        type: Date,
+        type: String,
         // required: true,
     },
     numero: {
-        type: Date,
+        type: String,
         // required: true,
     },
     complemento: {
