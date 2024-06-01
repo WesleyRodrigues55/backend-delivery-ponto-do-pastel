@@ -37,6 +37,93 @@ router.get("/get-orders-by-id-user/:idUser", unauthorized, async(req, res) => {
                     "data_pedido": 1,
                     "status_pedido": 1
                 }
+            },
+            {
+                $sort: {
+                    data_pedido: -1
+                }
+            }
+        ]);
+
+        return res.status(200).send({ results: results });
+
+    } catch (error) {
+        console.error("Erro ao busca os pedidos:", error);
+        res.status(500).send({ message: "Erro ao busca os pedidos" });
+    }
+})
+
+router.get("/get-orders-details-by-id-carrinho/:idCarrinho", unauthorized, async(req, res) => {
+    const idCarrinho = req.params.idCarrinho;
+    try {
+        const results = await OrderDetails.aggregate([{
+                $match: {
+                    carrinho_id: new ObjectId(idCarrinho)
+                },
+            },
+            {
+                $lookup: {
+                    from: "carrinho",
+                    let: { carrinho_id: "$carrinho_id" },
+                    pipeline: [{
+                        $match: {
+                            $expr: {
+                                $eq: ["$$carrinho_id", "$_id"]
+                            }
+                        }
+                    }],
+                    as: "carrinho",
+                }
+            },
+            {
+                $lookup: {
+                    from: "itens_carrinho",
+                    let: { carrinho_id: "$carrinho_id" },
+                    pipeline: [{
+                            $match: {
+                                $expr: {
+                                    $eq: ["$$carrinho_id", "$carrinho_id"]
+                                }
+                            }
+                        },
+                        {
+                            $lookup: {
+                                from: "produto",
+                                let: { produto_id: "$produto_id" },
+                                pipeline: [{
+                                    $match: {
+                                        $expr: {
+                                            $eq: ["$$produto_id", "$_id"]
+                                        }
+                                    }
+                                }],
+                                as: "produto"
+                            }
+                        },
+                        {
+                            $unwind: "$produto"
+                        }
+                    ],
+                    as: "itens_carrinho"
+                }
+            },
+            {
+                $project: {
+                    "_id": 1,
+                    "carrinho.status_compra": 1,
+                    "carrinho.data_abertura": 1,
+                    "carrinho.taxa_fixa": 1,
+                    "carrinho.taxa_fixa": 1,
+                    "carrinho.valor_total_com_taxa": 1,
+                    "carrinho.valor_total_compra": 1,
+                    "itens_carrinho.quantidade": 1,
+                    "itens_carrinho.observacao": 1,
+                    "itens_carrinho.produto.nome": 1,
+                    "itens_carrinho.produto.preco": 1,
+                    "itens_carrinho.produto.imagem_produto": 1,
+                    "itens_carrinho.lista_ingredientes.nome": 1,
+                    "itens_carrinho.lista_ingredientes.valor": 1,
+                }
             }
         ]);
 
@@ -122,7 +209,8 @@ router.get("/get-orders-details-by-id-user/:idUser", unauthorized, async(req, re
 
 router.post("/insert-orders-details", unauthorized, async(req, res) => {
     try {
-        const { endereco_usuario, primeiro_endereco, endereco_usuario_id, lista_pagamento, ...query } = req.body;
+        const { endereco_usuario, primeiro_endereco, endereco_usuario_id, lista_pagamento, data_pedido, ...query } = req.body;
+        const currentDate = new Date().toISOString();
         let idUserAddres;
 
         if (primeiro_endereco == 1) {
@@ -135,7 +223,7 @@ router.post("/insert-orders-details", unauthorized, async(req, res) => {
             await UserAddress.findByIdAndUpdate({ _id: new ObjectId(idUserAddres) }, { $set: insertUserAddress });
         }
 
-        const insertOrdersDetails = new OrderDetails({ endereco_usuario_id: new ObjectId(idUserAddres), ...query });
+        const insertOrdersDetails = new OrderDetails({ endereco_usuario_id: new ObjectId(idUserAddres), data_pedido: currentDate, ...query });
         const results = await insertOrdersDetails.save();
 
         // gera payment e retorn id do pagamento
