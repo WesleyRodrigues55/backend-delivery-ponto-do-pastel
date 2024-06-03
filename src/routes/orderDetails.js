@@ -21,6 +21,17 @@ router.get("/get-approved-orders", unauthorized, async(req, res) => {
     }
 })
 
+router.get("/get-order-delivery-status", unauthorized, async(req, res) => {
+    try {
+        const results = await OrderDetails.find({ status_pedido: 'em preparo' });
+        return res.status(200).send({ results: results });
+
+    } catch (error) {
+        console.error("Erro ao buscar Status da entrega do pedido:", error);
+        res.status(500).send({ message: "Erro ao buscar Status da entrega do pedido" });
+    }
+})
+
 router.get("/get-orders-by-id-user/:idUser", unauthorized, async(req, res) => {
     const idUser = req.params.idUser;
     try {
@@ -247,6 +258,24 @@ router.post("/insert-orders-details", unauthorized, async(req, res) => {
     } catch (error) {
         console.error("Erro ao inserir um novo Status da entrega do pedido:", error);
         res.status(500).send({ message: "Erro ao inserir um novo Status da entrega do pedido" });
+    }
+})
+
+router.post("/insert-order-delivery-status/", unauthorized, async(req, res) => {
+    try {
+        const query = req.body;
+        const orderDetailsId = req.body.detalhes_do_pedido_id;
+        const existsOrderDetails = await OrderDetails.findOne({ _id: new ObjectId(`${orderDetailsId}`) });
+
+        if (existsOrderDetails) {
+            const udaptedOrderDeliveryStatus = await OrderDetails.findOneAndUpdate({ _id: new ObjectId(`${orderDetailsId}`) }, { $set: { status_pedido: "em preparo" } }, { new: true });
+            return res.status(200).send({ message: "Status da entrega do pedido atualizado com sucesso!" });
+        }
+
+        return res.status(500).send({ message: "Erro ao atualizar um novo Status da entrega do pedido!" });
+    } catch (error) {
+        console.error("Erro ao atualizar um novo Status da entrega do pedido:", error);
+        res.status(500).send({ message: "Erro ao atualizar um novo Status da entrega do pedido" });
     }
 })
 
