@@ -56,14 +56,12 @@ const updateOrderDetailsWithInformationsPayment = async(data) => {
     }
 }
 
-const getOrderDetailsByIdPaymendAndUpdatedStatusPayment = async(idPayment, status) => {
+const getOrderDetailsByIdPaymentAndUpdatedStatusPayment = async(idPayment, status) => {
     try {
         const updateOrderDetails = await OrderDetails.findOneAndUpdate({ "lista_pagamento.codigo_pagamento": Number(idPayment) }, {
-                $set: { "lista_pagamento.$[elem].status_pagamento": "approved" }
-            }, { new: true, arrayFilters: [{ "elem.codigo_pagamento": Number(idPayment) }] })
-            // console.error(updateOrderDetails)
-        return updateOrderDetails;
-
+            $set: { "lista_pagamento.$[elem].status_pagamento": "approved" }
+        }, { new: true, arrayFilters: [{ "elem.codigo_pagamento": Number(idPayment) }] })
+        return updateOrderDetails._id;
     } catch (error) {
         console.error(error)
     }
@@ -89,6 +87,6 @@ const closedCartByIdPayment = async(idPayment) => {
 export default {
     insertPayment,
     updateOrderDetailsWithInformationsPayment,
-    getOrderDetailsByIdPaymendAndUpdatedStatusPayment,
+    getOrderDetailsByIdPaymentAndUpdatedStatusPayment,
     closedCartByIdPayment
 };
