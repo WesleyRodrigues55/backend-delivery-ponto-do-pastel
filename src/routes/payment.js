@@ -4,6 +4,7 @@ import { ObjectId } from "mongodb";
 import { Payment, MercadoPagoConfig } from 'mercadopago';
 import paymentUtils from '../utils/payment.js'
 import passport from 'passport';
+import OrderDetails from "../model/OrderDetails.js";
 
 const unauthorized = passport.authenticate('jwt', { session: false });
 
@@ -36,24 +37,26 @@ const router = express.Router();
 
 router.get('/get-status-payment/:id', unauthorized, async(req, res) => {
     const id = req.params.id;
-    payment.get({
-        id: id,
-    }).then((response) => {
-        const getPayment = response
-        if (getPayment.status == "approved") {
-            console.error("status tá aprovado!")
-            paymentUtils.getOrderDetailsByIdPaymendAndUpdatedStatusPayment(id, getPayment.status);
+    let queryPaymentResult;
+    try {
+        const response = await payment.get({ id: id });
+        const getPayment = response;
 
+        if (getPayment.status == "approved") {
+            console.error("status tá aprovado!");
+            queryPaymentResult = await paymentUtils.getOrderDetailsByIdPaymentAndUpdatedStatusPayment(id, getPayment.status);
             // fecha carrinho
             paymentUtils.closedCartByIdPayment(id);
         } else {
-            console.error("n aprovou ainda")
+            console.error("n aprovou ainda");
         }
-        return res.status(200).send({ results: getPayment });
-    }).catch((error) => {
-        console.log(error)
+
+        // return res.status(200).send({ results: getPayment });
+        return res.status(200).send({ results: { status_payment: getPayment, id_order_details: queryPaymentResult } });
+    } catch (error) {
+        console.error(error);
         return res.status(500).send({ message: "Error" });
-    });
+    }
 });
 
 export default router;
