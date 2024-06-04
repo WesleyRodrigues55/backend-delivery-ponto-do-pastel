@@ -14,7 +14,6 @@ import product from "./routes/product.js";
 import stock from "./routes/stock.js";
 import users from "./routes/users.js";
 import statusStore from "./routes/statusStore.js";
-import orderDeliveryStatus from "./routes/orderDeliveryStatus.js";
 import userAddress from "./routes/userAddress.js";
 import payment from "./routes/payment.js";
 
@@ -41,7 +40,6 @@ app.use("/api/items-cart", itemsCart);
 app.use("/api/ingredient", ingredient);
 app.use("/api/cart", cart);
 app.use("/api/store", statusStore);
-app.use("/api/order-delivery-status", orderDeliveryStatus);
 app.use("/api/user-address", userAddress);
 app.use("/api/payment", payment);
 
