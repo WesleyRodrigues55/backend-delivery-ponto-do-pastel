@@ -12,7 +12,18 @@ const router = express.Router();
 
 router.get("/get-approved-orders", unauthorized, async(req, res) => {
     try {
-        const results = await OrderDetails.find({ status_pedido: 'pendente' });
+        const currentDate = new Date();
+
+        const startOfDay = new Date(currentDate);
+        startOfDay.setUTCHours(0, 0, 0, 0);
+
+        const endOfDay = new Date(currentDate);
+        endOfDay.setUTCHours(23, 59, 59, 999)
+
+        const results = await OrderDetails.find({
+            status_pedido: 'pendente',
+            data_pedido: { $gte: startOfDay, $lt: endOfDay }
+        });
         return res.status(200).send({ results: results });
 
     } catch (error) {
@@ -35,12 +46,24 @@ router.get("/get-status-order-details/:id", unauthorized, async(req, res) => {
 
 router.get("/get-order-delivery-status", unauthorized, async(req, res) => {
     try {
-        // const results = await OrderDetails.find({ status_pedido: 'em preparo' });
+        const currentDate = new Date();
+
+        const startOfDay = new Date(currentDate);
+        startOfDay.setUTCHours(0, 0, 0, 0);
+
+        const endOfDay = new Date(currentDate);
+        endOfDay.setUTCHours(23, 59, 59, 999);
+
         const results = await OrderDetails.aggregate([{
                 $match: {
-                    $or: [
-                        { status_pedido: 'em preparo' },
-                        { status_pedido: 'a caminho' }
+                    $and: [
+                        { data_pedido: { $gte: startOfDay, $lt: endOfDay } },
+                        {
+                            $or: [
+                                { status_pedido: 'em preparo' },
+                                { status_pedido: 'a caminho' }
+                            ]
+                        }
                     ]
                 }
             },
@@ -50,8 +73,8 @@ router.get("/get-order-delivery-status", unauthorized, async(req, res) => {
                 }
             }
         ]);
-        return res.status(200).send({ results: results });
 
+        return res.status(200).send({ results: results });
     } catch (error) {
         console.error("Erro ao buscar Status da entrega do pedido:", error);
         res.status(500).send({ message: "Erro ao buscar Status da entrega do pedido" });
