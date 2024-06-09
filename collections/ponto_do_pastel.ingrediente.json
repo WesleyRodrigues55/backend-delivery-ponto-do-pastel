@@ -1,0 +1,63 @@
+[{
+  "_id": {
+    "$oid": "6643ad80f112cc9ade99a989"
+  },
+  "nome": "Queijo mussarela",
+  "valor": "3.5",
+  "categoria": "salgados",
+  "ativo": 1
+},
+{
+  "_id": {
+    "$oid": "6643ada0f112cc9ade99a98d"
+  },
+  "nome": "Queijo cheddar",
+  "valor": "4.50",
+  "categoria": "salgados",
+  "ativo": 1
+},
+{
+  "_id": {
+    "$oid": "6643adacf112cc9ade99a991"
+  },
+  "nome": "Tomate picado",
+  "valor": "2.00",
+  "categoria": "salgados",
+  "ativo": 1
+},
+{
+  "_id": {
+    "$oid": "6643adbaf112cc9ade99a995"
+  },
+  "nome": "Bacon picado",
+  "valor": "4.50",
+  "categoria": "salgados",
+  "ativo": 1
+},
+{
+  "_id": {
+    "$oid": "6643add4f112cc9ade99a99a"
+  },
+  "nome": "Calabresa fatiada",
+  "valor": "4.50",
+  "categoria": "salgados",
+  "ativo": 1
+},
+{
+  "_id": {
+    "$oid": "6643adddf112cc9ade99a99e"
+  },
+  "nome": "Ovo cozido",
+  "valor": "2.50",
+  "categoria": "salgados",
+  "ativo": 1
+},
+{
+  "_id": {
+    "$oid": "6643ade3f112cc9ade99a9a2"
+  },
+  "nome": "Azeitona fatiada",
+  "valor": "2.50",
+  "categoria": "salgados",
+  "ativo": 1
+}]
