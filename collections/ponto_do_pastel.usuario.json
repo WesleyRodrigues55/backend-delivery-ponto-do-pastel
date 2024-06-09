@@ -1,0 +1,22 @@
+[{
+  "_id": {
+    "$oid": "662fd260a19ec45d2367ae8b"
+  },
+  "nome": "adm",
+  "username": "adm@gmail.com",
+  "email": "adm@gmail.com",
+  "senha": "$2b$10$ElTgGrBDhWVt12t43LmfreDZqER419cXnjJ/kJn0mN0cbPA2Bjs96",
+  "whatsapp": "11975699778",
+  "cpf": "444.444.444-44",
+  "data_nascimento": {
+    "$date": "1992-03-10T00:00:00.000Z"
+  },
+  "nivel": 2,
+  "ativo": 0,
+  "codigo_verificacao": "FD9386",
+  "manter_conectado": 0,
+  "preferencia_notificacao": [
+    "email"
+  ],
+  "termo_politicas": 1
+}]

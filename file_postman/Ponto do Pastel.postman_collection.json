@@ -1,0 +1,1401 @@
+{
+	"info": {
+		"_postman_id": "3e7f754c-5b0f-45ee-8f83-76fd352298a3",
+		"name": "Ponto do Pastel",
+		"description": "# About this collection\n\nThis collection helps you set up contract tests to ensure that two separate systems are compatible and can communicate with one another.\n\n## **Using the collection**\n\n**Step 1:** Send the sample requests and view the response and test results.\n\n**Step 2:** Replace the sample request URLs with your desired API endpoints.\n\n**Step 3:** Customize the tests in the \"Tests\" tab if needed. Don't forget to save your changes.\n\n### Resources\n\n[Scripting in Postman](https://learning.postman.com/docs/writing-scripts/intro-to-scripts/)\n\n[Test script examples](https://learning.postman.com/docs/writing-scripts/script-references/test-examples/)\n\n[Postman Sandbox API reference](https://learning.postman.com/docs/sending-requests/grpc/postman-sandbox-api/#writing-assertions)\n\n[Using the Collection Runner](https://learning.postman.com/docs/collections/running-collections/intro-to-collection-runs/)\n\n[  \n](https://postman.postman.co/documentation/24552533-5bead607-0197-4e1d-87d4-3160bc7631c1?entity=&branch=&version=)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27775346"
+	},
+	"item": [
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Users",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Validate that the response code should be 200\r",
+									"pm.test(\"Response Code should be 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"// Run validations on response headers like Content-Type\r",
+									"pm.test(\"Content-Type should be JSON\", function () {\r",
+									"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');\r",
+									"});\r",
+									"\r",
+									"const json = pm.response.json();\r",
+									"\r",
+									"// The response body, including individual attributes can be evaluated for correctness\r",
+									"pm.test(\"`args` should contain the correct query params\", function () {\r",
+									"    pm.expect(json.args).to.be.an('object');\r",
+									"    pm.expect(json.args.foo).to.eql('bar');\r",
+									"    pm.expect(json.args.baz).to.eql('value');\r",
+									"});\r",
+									"\r",
+									"// Non-trivial data types like Dates can also be tested against\r",
+									"pm.test(\"Date in the header should be valid\", function () {\r",
+									"    const parsedDate = new Date(pm.response.headers.get('Date'));\r",
+									"    pm.expect(parsedDate).to.be.a('date');\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjJiZmMzYzk2MTIyOWQ4MjI1YWY4YTAiLCJpYXQiOjE3MTQxNjAxODYsImV4cCI6MTcxNDE2Mzc4Nn0.MbopW0e4H28qU54sAz1v5TKCkDQnLfDbeH3fdE8Yoa0",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/users/get-users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"users",
+								"get-users"
+							]
+						},
+						"description": "The tests in the request validate the response code and the data returned in the response is the same as the one being sent."
+					},
+					"response": []
+				},
+				{
+					"name": "User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const json = pm.response.json();\r",
+									"\r",
+									"// Validate raw body sent in the request, be it form-data or JSON\r",
+									"pm.test(\"`form` should contain the correct form data\", function () {\r",
+									"    pm.expect(json.form).to.be.an('object');\r",
+									"    pm.expect(json.form.foo1).to.eql('bar1');\r",
+									"    pm.expect(json.form.foo2).to.eql('bar2');\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"followOriginalHttpMethod": false
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"Ana Souza\",\r\n    \"username\": \"ana.souza@example.com\",\r\n    \"email\": \"ana.souza@example.com\",\r\n    \"whatsapp\": \"22788889999\",\r\n    \"cpf\": \"345.678.901-22\",\r\n    \"data_nascimento\": \"1992-03-10\",\r\n    \"senha\": \"123456\",\r\n    \"nivel\": 1,\r\n    \"ativo\": 0,\r\n    \"codigo_verificacao\": \"\",\r\n    \"manter_conectado\": 0,\r\n    \"localizacao_usuario\": [{\r\n        \"latitude\": -22.9068,\r\n        \"longitude\": -43.1729\r\n    }],\r\n    \"preferencia_notificacao\": [\r\n        \"email\"\r\n    ],\r\n    \"termo_politicas\": 1\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/users/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"users",
+								"users"
+							]
+						},
+						"description": "The tests in this request validate that the request body sent as form-data is valid."
+					},
+					"response": []
+				},
+				{
+					"name": "User by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/users/users/662ae61277a5ca53aa4e3d90",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"users",
+								"users",
+								"662ae61277a5ca53aa4e3d90"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update user",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"Ana Silva\",\r\n    \"email\": \"ana.silva@example.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/users/users/661b0c168fd524c3b039e2ed",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"users",
+								"users",
+								"661b0c168fd524c3b039e2ed"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete user",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/users/users/661b08116742252320ca81ff",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"users",
+								"users",
+								"661b08116742252320ca81ff"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login with email",
+					"item": [
+						{
+							"name": "Authenticator login system adm",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\": \"adm@gmail.com\",\r\n    \"senha\": \"123456\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:5000/api/auth/login-system",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"auth",
+										"login-system"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Register with password",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"nome\": \"adm\",\r\n    \"username\": \"adm@gmail.com\",\r\n    \"email\": \"adm@gmail.com\",\r\n    \"whatsapp\": \"11975699770\",\r\n    \"cpf\": \"444.444.444-44\",\r\n    \"data_nascimento\": \"1992-03-10\",\r\n    \"senha\": \"123456\",\r\n    \"nivel\": 2,\r\n    \"ativo\": 0,\r\n    \"codigo_verificacao\": \"\",\r\n    \"manter_conectado\": 0,\r\n    \"localizacao_usuario\": [{\r\n        \"latitude\": -22.9068,\r\n        \"longitude\": -43.1729\r\n    }],\r\n    \"preferencia_notificacao\": [\r\n        \"email\"\r\n    ],\r\n    \"termo_politicas\": 1\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:5000/api/auth/register",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"auth",
+										"register"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Login with whatsapp",
+					"item": [
+						{
+							"name": "Generator codigo_verificao app",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:5000/api/auth/generator-code-app/11975699770",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"auth",
+										"generator-code-app",
+										"11975699770"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Register with wpp",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"nome\": \"testeeeeeeee\",\r\n    \"username\": \"11972699720\",\r\n    \"whatsapp\": \"11972699720\",\r\n    \"email\": \"\",\r\n    \"cpf\": \"111.233.112-12\",\r\n    \"data_nascimento\": \"1185-08-25\",\r\n    \"nivel\": 1,\r\n    \"ativo\": 1,\r\n    \"manter_conectado\": 1,\r\n    \"preferencia_notificacao\": [\r\n        \"whatsapp\"\r\n    ],\r\n    \"termo_politicas\": 1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:5000/api/auth/register-with-wpp",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"auth",
+										"register-with-wpp"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Authenticator code for login app",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjJmZDI2MGExOWVjNDVkMjM2N2FlOGIiLCJpYXQiOjE3MTUzNTk3OTh9.o1ooVVZm1PUURQPJxwytrP8MNhdOLGeJl18DMKmzeSk",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\": \"11975699770\",\r\n    \"senha\": \"44B62F\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:5000/api/auth/authenticator-code-app",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"auth",
+										"authenticator-code-app"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Validate token",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjJmZDI2MGExOWVjNDVkMjM2N2FlOGIiLCJpYXQiOjE3MTUwMDY1ODQsImV4cCI6MTcxNTAxMDE4NH0.LZvXlGmHN9IeaZt3LEUVEnECnmdHxKhvBIrrBZM_-9Y",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/auth/validar-token",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"auth",
+								"validar-token"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Products",
+			"item": [
+				{
+					"name": "Get all products",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/product/get-products",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"product",
+								"get-products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get products by category",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/product/get-products-by-category/bebidas",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"product",
+								"get-products-by-category",
+								"bebidas"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get product by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/product/product-by-id/6619c5fbe135150cd751bb3b",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"product",
+								"product-by-id",
+								"6619c5fbe135150cd751bb3b"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Insert product",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzIaa1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjJmZDI2MGExOWVjNDVkMjM2N2FlOGIiLCJpYXQiOjE3MTQ3NDM5NTIsImV4cCI6MTcxNDc0NzU1Mn0.p3LdpnQLcNqs9PfSuIstzi3b9lBj5MeCVBPet4Y0ZM8",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"teste\",\r\n    \"descricao\": \"Delicioso pastel recheado com carne moída temperada e queijo mussarela.\",\r\n    \"preco\": \"10.44\",\r\n    \"categoria\": \"BEBIDAS\",\r\n    \"imagem_produto\": \"https://raw.githubusercontent.com/WesleyRodrigues55/app-delivery-ponto-do-pastel/main/img/produtos/pastel-carne.png\",\r\n    \"ativo\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/product/insert-product",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"product",
+								"insert-product"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Updated product by id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjJmZDI2MGExOWVjNDVkMjM2N2FlOGIiLCJpYXQiOjE3MTQ3NDM5NTIsImV4cCI6MTcxNDc0NzU1Mn0.p3LdpnQLcNqs9PfSuIstzi3b9lBj5MeCVBPet4Y0ZM8",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"teste 1\",\r\n    \"descricao\": \"Delicioso pastel recheado com carne moída temperada e queijo mussarela.\",\r\n    \"preco\": 10,\r\n    \"categoria\": \"BEBIDAS\",\r\n    \"imagem_produto\": \"https://raw.githubusercontent.com/WesleyRodrigues55/app-delivery-ponto-do-pastel/main/img/produtos/pastel-carne.png\",\r\n    \"ativo\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/product/update-product/6634f2d89209a850a6850ebd",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"product",
+								"update-product",
+								"6634f2d89209a850a6850ebd"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Status product by id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjJmZDI2MGExOWVjNDVkMjM2N2FlOGIiLCJpYXQiOjE3MTUxNzQzNzB9.EjF9tf7BIEesJQd_vGRHIWSWSV-DaWSp6RXF0eHTchQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/product/status-product/6616cba6711f2f5954bd1ac2/0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"product",
+								"status-product",
+								"6616cba6711f2f5954bd1ac2",
+								"0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get products all",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/product/get-products-all",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"product",
+								"get-products-all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get product by id with ingredients",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/product/product-by-id-and-ingredients/6616cba6711f2f5954bd1ac2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"product",
+								"product-by-id-and-ingredients",
+								"6616cba6711f2f5954bd1ac2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "StatusStore",
+			"item": [
+				{
+					"name": "Status Store",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/store/get-status",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"store",
+								"get-status"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Status Store",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjJmZDI2MGExOWVjNDVkMjM2N2FlOGIiLCJpYXQiOjE3MTUzNTk3OTh9.o1ooVVZm1PUURQPJxwytrP8MNhdOLGeJl18DMKmzeSk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"status\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/store/update-status/663e4db91a52ef9c8522f41d",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"store",
+								"update-status",
+								"663e4db91a52ef9c8522f41d"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Cart",
+			"item": [
+				{
+					"name": "Get Cart Open by ID User",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/cart/get-cart-open/66368613152b884cf07deff0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"cart",
+								"get-cart-open",
+								"66368613152b884cf07deff0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Cart Open With Items Cart by ID User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjJmZDI2MGExOWVjNDVkMjM2N2FlOGIiLCJpYXQiOjE3MTcwMjkyNzV9.aCUeCZN3CiGSsPgDqF_r7BO-T7tVsNrWI9Gc-XJndzI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/cart/get-cart-open-with-items-cart/66368613152b884cf07deff0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"cart",
+								"get-cart-open-with-items-cart",
+								"66368613152b884cf07deff0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get cart Open With Items By Cart Id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjJmZDI2MGExOWVjNDVkMjM2N2FlOGIiLCJpYXQiOjE3MTU5NjI2MzR9.xhVeydJhoMtT-Ch6yXQxEjTpQz9NpupCQpP2zWgPbcY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/cart/get-cart-by-id/665257d043bced6d9127f3f7",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"cart",
+								"get-cart-by-id",
+								"665257d043bced6d9127f3f7"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Inventory",
+			"item": [
+				{
+					"name": "Get All Inventory",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjJmZDI2MGExOWVjNDVkMjM2N2FlOGIiLCJpYXQiOjE3MTU4ODA2MjN9.lFHo6entAB7e9WBHV3f0XI4kkrvOQPXrphviDk4greM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/stock/get-stock",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"stock",
+								"get-stock"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Insert Stock",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjJmZDI2MGExOWVjNDVkMjM2N2FlOGIiLCJpYXQiOjE3MTU4ODA2MjN9.lFHo6entAB7e9WBHV3f0XI4kkrvOQPXrphviDk4greM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ingrediente_id\": \"6616cf85711f2f5954bd1aca\",\r\n    \"descricao\": \"teste\",\r\n    \"quantidade\": 2,\r\n    \"unidade_medida\": \"grama\",\r\n    \"valor\": \"2.90\",\r\n    \"ativo\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/stock/insert-stock",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"stock",
+								"insert-stock"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Updated stock by id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjJmZDI2MGExOWVjNDVkMjM2N2FlOGIiLCJpYXQiOjE3MTU4ODA2MjN9.lFHo6entAB7e9WBHV3f0XI4kkrvOQPXrphviDk4greM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ingrediente_id\": \"6616cf85711f2f5954bd1aca\",\r\n    \"descricao\": \"teste\",\r\n    \"quantidade\": 2,\r\n    \"unidade_medida\": \"grama\",\r\n    \"valor\": \"2.90\",\r\n    \"ativo\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/stock/update-stock/664657611f09bdf38593b478",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"stock",
+								"update-stock",
+								"664657611f09bdf38593b478"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Inventory By Id and Ingredient",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjJmZDI2MGExOWVjNDVkMjM2N2FlOGIiLCJpYXQiOjE3MTU4ODA2MjN9.lFHo6entAB7e9WBHV3f0XI4kkrvOQPXrphviDk4greM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/stock/stock-by-id-and-ingredient-name/66169dd1711f2f5954bd1a70",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"stock",
+								"stock-by-id-and-ingredient-name",
+								"66169dd1711f2f5954bd1a70"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Ingredients",
+			"item": [
+				{
+					"name": "Get All Ingredients",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/ingredient/get-ingredients",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"ingredient",
+								"get-ingredients"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "OrderDetails",
+			"item": [
+				{
+					"name": "Get ORder Details Approved",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjJmZDI2MGExOWVjNDVkMjM2N2FlOGIiLCJpYXQiOjE3MTY1Nzc1MTJ9.-oFXUBB5M1pJVIYIxUTgitXNn8TKReD-o8CDuXZJ_7U",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/order-details/get-approved-orders",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"order-details",
+								"get-approved-orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Order Details By Id User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjJmZDI2MGExOWVjNDVkMjM2N2FlOGIiLCJpYXQiOjE3MTYwNTc4NzZ9.L4lINRceAL34lq0CF_dnEdacy3aFM4bKJyQMLcvP7bQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/order-details/get-orders-by-id-user/662bec7a0489155a21fd6fa0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"order-details",
+								"get-orders-by-id-user",
+								"662bec7a0489155a21fd6fa0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Insert Order Details",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjJmZDI2MGExOWVjNDVkMjM2N2FlOGIiLCJpYXQiOjE3MTcxMTIxMDd9.bGN5nXLEe6Z0Qx64cA07MRgJAV7ekVfTZXPGaFCyOck",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"carrinho_id\": \"6654d4c8d4f9fcbac9783c1a\",\r\n    \"usuario_id\": \"66368613152b884cf07deff0\",\r\n    \"valor_total\": \"38.30\",\r\n    \"endereco_usuario_id\": \"66591ae821a1c9ea6dbaa835\",\r\n    \"lista_pagamento\": [\r\n        {\r\n            \"codigo_pagamento\": \"\",\r\n            \"forma_pagamento\": \"PIX\",\r\n            \"qrcode\": \"\",\r\n            \"status_pagamento\": \"\",\r\n            \"link_pagamento\": \"\",\r\n            \"email_usuario\": \"wesley@gmail.com\"\r\n        }\r\n    ],\r\n    \"data_pedido\": \"2024-04-10T14:10:00.000+00:00\",\r\n    \"status_pedido\": \"pendente\",\r\n    \"primeiro_endereco\": 0,\r\n    \"endereco_usuario\": [\r\n        {\r\n            \"usuario_id\": \"66368613152b884cf07deff0\",\r\n            \"cidade\": \"Sorocaba\",\r\n            \"bairro\": \"Baiiro C\",\r\n            \"rua\": \"Rua C\",\r\n            \"numero\": \"333\",\r\n            \"complemento\": \"teste 3\"\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/order-details/insert-orders-details",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"order-details",
+								"insert-orders-details"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Order Details By Id Cart",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjJmZDI2MGExOWVjNDVkMjM2N2FlOGIiLCJpYXQiOjE3MTc0NTYwMDJ9.BuJwZVId51WBYnsvvAYbTZ3Rfu3jFqYMHRj1OpApuDQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/order-details/get-orders-details-by-id-carrinho/665b86566cb2b5f1adc4ae79",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"order-details",
+								"get-orders-details-by-id-carrinho",
+								"665b86566cb2b5f1adc4ae79"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Order Delivery Status",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjJmZDI2MGExOWVjNDVkMjM2N2FlOGIiLCJpYXQiOjE3MTc2MzI5MTN9.iEvMbZdGdbP1rLa1aXTxceybo6_vu2xSHZB6qUwiPmo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/order-details/get-order-delivery-status",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"order-details",
+								"get-order-delivery-status"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Order Delivery Status",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjJmZDI2MGExOWVjNDVkMjM2N2FlOGIiLCJpYXQiOjE3MTU5NjI2MzR9.xhVeydJhoMtT-Ch6yXQxEjTpQz9NpupCQpP2zWgPbcY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"detalhes_do_pedido_id\": \"665b86956cb2b5f1adc4ae8d\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/order-details/update-order-delivery-status",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"order-details",
+								"update-order-delivery-status"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Order Delivery Status For Delivery",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjJmZDI2MGExOWVjNDVkMjM2N2FlOGIiLCJpYXQiOjE3MTc0MjQ5MTN9.Ow4nG_tynXxPgw-arfuVcUz4KT8qJiTwheIqtlLAcOU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"detalhes_do_pedido_id\": \"665dd2ff826b2b2f0118dd78\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/order-details/update-order-delivery-status-for-delivery",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"order-details",
+								"update-order-delivery-status-for-delivery"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Status Order Details",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjJmZDI2MGExOWVjNDVkMjM2N2FlOGIiLCJpYXQiOjE3MTc0NTYwMDJ9.BuJwZVId51WBYnsvvAYbTZ3Rfu3jFqYMHRj1OpApuDQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/order-details/get-status-order-details/665e5d35b0bb9fce45281920",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"order-details",
+								"get-status-order-details",
+								"665e5d35b0bb9fce45281920"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "ItemsCart",
+			"item": [
+				{
+					"name": "Insert New Item In Cart",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjJmZDI2MGExOWVjNDVkMjM2N2FlOGIiLCJpYXQiOjE3MTY1Nzc1MTJ9.-oFXUBB5M1pJVIYIxUTgitXNn8TKReD-o8CDuXZJ_7U",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"produto_id\": \"6616cba6711f2f5954bd1ac2\",\r\n    \"lista_ingredientes\": [\r\n        {\r\n            \"id\": \"6643ada0f112cc9ade99a98d\",\r\n            \"preco\": \"2\",\r\n            \"nome\": \"ingrediente teste\"\r\n        }\r\n    ],\r\n    \"quantidade\": 1,\r\n    \"preco_unitario\": \"10\",\r\n    \"preco_total\": \"10\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/items-cart/insert_item_in_cart/66368613152b884cf07deff0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"items-cart",
+								"insert_item_in_cart",
+								"66368613152b884cf07deff0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Payment",
+			"item": [
+				{
+					"name": "Post new Payment",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjJmZDI2MGExOWVjNDVkMjM2N2FlOGIiLCJpYXQiOjE3MTcxODAxNDF9.8eSeHuLPA4Hnlz_f44hO1D59Um5Ri4ByDZEZYXFL38Y",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"valor_total\": \"2.01\",\r\n    \"tipo_pagamento\": \"PIX\",\r\n    \"email_user\": \"wesley@gmail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/payment/test-payment",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"payment",
+								"test-payment"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Payment By Id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjJmZDI2MGExOWVjNDVkMjM2N2FlOGIiLCJpYXQiOjE3MTcxODAxNDF9.8eSeHuLPA4Hnlz_f44hO1D59Um5Ri4ByDZEZYXFL38Y",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/payment/get-status-payment/79728941206",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"payment",
+								"get-status-payment",
+								"79728941206"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "https://postman-echo.com"
+		}
+	]
+}
