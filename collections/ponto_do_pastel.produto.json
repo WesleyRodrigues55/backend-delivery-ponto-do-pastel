@@ -1,0 +1,187 @@
+[{
+  "_id": {
+    "$oid": "6616cba6711f2f5954bd1ac2"
+  },
+  "nome": "Pastel de Carne",
+  "descricao": "Delicioso pastel recheado com carne moída temperada e ovo cozido",
+  "preco": "10.90",
+  "categoria": "salgados",
+  "imagem_produto": "https://raw.githubusercontent.com/WesleyRodrigues55/app-delivery-ponto-do-pastel/main/img/produtos/pastel-carne.png",
+  "ativo": 1
+},
+{
+  "_id": {
+    "$oid": "6619c5fbe135150cd751bb3b"
+  },
+  "nome": "Pastel de Carne com Queijo",
+  "descricao": "Delicioso pastel recheado com carne moída temperada e queijo mussarela.",
+  "preco": "10.90",
+  "categoria": "salgados",
+  "imagem_produto": "https://raw.githubusercontent.com/WesleyRodrigues55/app-delivery-ponto-do-pastel/main/img/produtos/pastel-carne-queijo.png",
+  "ativo": 1
+},
+{
+  "_id": {
+    "$oid": "661d5479674e4c3e95a60ad4"
+  },
+  "nome": "Pastel de Pizza",
+  "descricao": "Delicioso pastel recheado com muuuito queijo, tomate em cubinhos e azeitonas, para dar aquele toque especial ..",
+  "preco": "10.90",
+  "categoria": "salgados",
+  "ativo": 1,
+  "imagem_produto": "https://raw.githubusercontent.com/WesleyRodrigues55/app-delivery-ponto-do-pastel/main/img/produtos/pastel-pizza.png"
+},
+{
+  "_id": {
+    "$oid": "663500574cd37751dfe852a5"
+  },
+  "nome": "Pastel de Queijo",
+  "descricao": "O MAIS PEDIDO! Delicioso pastel recheado com creme de queijo. É de comer babando!",
+  "preco": "12.90",
+  "categoria": "salgados",
+  "imagem_produto": "https://raw.githubusercontent.com/WesleyRodrigues55/app-delivery-ponto-do-pastel/main/img/produtos/pastel-queijo.png",
+  "ativo": 1
+},
+{
+  "_id": {
+    "$oid": "663500c34cd37751dfe852a9"
+  },
+  "nome": "Pastel de Frango",
+  "descricao": "PARA A GALERA MAROMBA! Delicioso pastel recheado com muuito frango e queijo. Pode comer que é proteína e gordura boa!",
+  "preco": "12.90",
+  "categoria": "salgados",
+  "imagem_produto": "https://raw.githubusercontent.com/WesleyRodrigues55/app-delivery-ponto-do-pastel/main/img/produtos/pastel-frango.png",
+  "ativo": 1
+},
+{
+  "_id": {
+    "$oid": "663501064cd37751dfe852ad"
+  },
+  "nome": "Pastel de Brócolis",
+  "descricao": "PARA OS FITNESS, TEM TAMBÉM! Delicioso pastel recheado com brócolis, queijo e bacon.",
+  "preco": "10.90",
+  "categoria": "salgados",
+  "imagem_produto": "https://raw.githubusercontent.com/WesleyRodrigues55/app-delivery-ponto-do-pastel/main/img/produtos/pastel-brocolis.png",
+  "ativo": 1
+},
+{
+  "_id": {
+    "$oid": "663507fe4cd37751dfe852bd"
+  },
+  "nome": "Pastel de Banana",
+  "descricao": "Delicioso pastel recheado com banana fatiadinha e um creminho receita secreta que é sucesso!.",
+  "preco": "10.90",
+  "categoria": "doces",
+  "imagem_produto": "https://raw.githubusercontent.com/WesleyRodrigues55/app-delivery-ponto-do-pastel/main/img/produtos/pastel-banana.png",
+  "ativo": 1
+},
+{
+  "_id": {
+    "$oid": "6635085d4cd37751dfe852c3"
+  },
+  "nome": "Pastel de Chocolate",
+  "descricao": "ALÔ CHOCOLOVERS! Delicioso pastel recheado com muuito chocolate! Se prepara para se lambuzar!",
+  "preco": "10.90",
+  "categoria": "doces",
+  "imagem_produto": "https://raw.githubusercontent.com/WesleyRodrigues55/app-delivery-ponto-do-pastel/main/img/produtos/pastel-chocolate.png",
+  "ativo": 1
+},
+{
+  "_id": {
+    "$oid": "663508954cd37751dfe852c7"
+  },
+  "nome": "Pastel de Morango com Chocolate",
+  "descricao": "O CLÁSSICO! Delicioso pastel recheado com morango em pedaços muuito chocolate! Esse é aquele que não erra!",
+  "preco": "12.90",
+  "categoria": "doces",
+  "imagem_produto": "https://raw.githubusercontent.com/WesleyRodrigues55/app-delivery-ponto-do-pastel/main/img/produtos/pastel-morango.png",
+  "ativo": 1
+},
+{
+  "_id": {
+    "$oid": "6635220f9a8f7440145a12b7"
+  },
+  "nome": "Pastel de Calabresa",
+  "descricao": "SÓ DE OLHAR JÁ DÁ ÁGUA NA BOCA! Delicioso pastel recheado com calabresa e catupiry!",
+  "preco": "12.90",
+  "categoria": "salgados",
+  "imagem_produto": "https://raw.githubusercontent.com/WesleyRodrigues55/app-delivery-ponto-do-pastel/main/img/produtos/pastel-calabresa.png",
+  "ativo": 1
+},
+{
+  "_id": {
+    "$oid": "663522b99a8f7440145a12bd"
+  },
+  "nome": "Pastel de Doce de Leite com Paçoca",
+  "descricao": "NUTRI CORRE AQUI! Delicioso pastel recheado muuito doce de leite e pedaços de paçoca!",
+  "preco": "12.90",
+  "categoria": "doces",
+  "imagem_produto": "https://raw.githubusercontent.com/WesleyRodrigues55/app-delivery-ponto-do-pastel/main/img/produtos/pastel-doce-de-leite.png",
+  "ativo": 1
+},
+{
+  "_id": {
+    "$oid": "663523589a8f7440145a12c1"
+  },
+  "nome": "Pastel Romeu e Julieta",
+  "descricao": "O CLÁSSICO DOS DOCES! Delicioso pastel recheado goiabada caseira e queijo minas!",
+  "preco": "12.90",
+  "categoria": "doces",
+  "imagem_produto": "https://raw.githubusercontent.com/WesleyRodrigues55/app-delivery-ponto-do-pastel/main/img/produtos/pastel-romeu-e-julieta.png",
+  "ativo": 1
+},
+{
+  "_id": {
+    "$oid": "663523d89a8f7440145a12c5"
+  },
+  "nome": "Garrafa de água",
+  "descricao": "Garrafa de água - 500ml",
+  "preco": "5.90",
+  "categoria": "bebidas",
+  "imagem_produto": "https://raw.githubusercontent.com/WesleyRodrigues55/app-delivery-ponto-do-pastel/main/img/bebidas/agua.png",
+  "ativo": 1
+},
+{
+  "_id": {
+    "$oid": "663524049a8f7440145a12c9"
+  },
+  "nome": "Coca-Cola Zero",
+  "descricao": "Lata de Coca-Cola Zero - 350ml",
+  "preco": "5.90",
+  "categoria": "bebidas",
+  "imagem_produto": "https://raw.githubusercontent.com/WesleyRodrigues55/app-delivery-ponto-do-pastel/main/img/bebidas/coca-zero.png",
+  "ativo": 1
+},
+{
+  "_id": {
+    "$oid": "663524189a8f7440145a12cd"
+  },
+  "nome": "Coca-Cola",
+  "descricao": "Lata de Coca-Cola - 350ml",
+  "preco": "5.90",
+  "categoria": "bebidas",
+  "imagem_produto": "https://raw.githubusercontent.com/WesleyRodrigues55/app-delivery-ponto-do-pastel/main/img/bebidas/coca.png",
+  "ativo": 1
+},
+{
+  "_id": {
+    "$oid": "6635243b9a8f7440145a12d1"
+  },
+  "nome": "Guaraná Antárctica",
+  "descricao": "Lata de Guaraná Antárctica - 350ml",
+  "preco": "5.90",
+  "categoria": "bebidas",
+  "imagem_produto": "https://raw.githubusercontent.com/WesleyRodrigues55/app-delivery-ponto-do-pastel/main/img/bebidas/guarana.png",
+  "ativo": 1
+},
+{
+  "_id": {
+    "$oid": "663524589a8f7440145a12d5"
+  },
+  "nome": "Suco de Laranja",
+  "descricao": "Copo de suco de laranja natural - 500ml",
+  "preco": "7.90",
+  "categoria": "bebidas",
+  "imagem_produto": "https://raw.githubusercontent.com/WesleyRodrigues55/app-delivery-ponto-do-pastel/main/img/bebidas/suco-laranja.png",
+  "ativo": 1
+}]

@@ -1,0 +1,42 @@
+[{
+  "_id": {
+    "$oid": "66169dd1711f2f5954bd1a70"
+  },
+  "ingrediente_id": {
+    "$oid": "6643ad80f112cc9ade99a989"
+  },
+  "descricao": "Massa de Pastel",
+  "quantidade": 100,
+  "unidade_medida": "grama",
+  "valor": "10.99",
+  "ativo": 1
+},
+{
+  "_id": {
+    "$oid": "664644a332f5088c0f90e388"
+  },
+  "produto_id": {
+    "$oid": "6616cba6711f2f5954bd1ac2"
+  },
+  "ingrediente_id": {
+    "$oid": "6643ad80f112cc9ade99a989"
+  },
+  "descricao": "Queijo mussarela",
+  "quantidade": 10,
+  "unidade_medida": "kilo",
+  "valor": "10.99",
+  "ativo": 1
+},
+{
+  "_id": {
+    "$oid": "664657611f09bdf38593b478"
+  },
+  "ingrediente_id": {
+    "$oid": "6616cf85711f2f5954bd1aca"
+  },
+  "descricao": "teste",
+  "quantidade": 2,
+  "unidade_medida": "grama",
+  "valor": "2.90",
+  "ativo": 1
+}]
